@@ -1,16 +1,5 @@
 """Flask Web-Dashboard für den Ticket Resale Scanner."""
-import sys
 import os
-
-# Pfad zu ticket-scanner/ (eine Ebene über web/) ins sys.path einfügen
-_here = os.path.dirname(os.path.abspath(__file__))
-_ticket_scanner_dir = os.path.dirname(_here)
-if _ticket_scanner_dir not in sys.path:
-    sys.path.insert(0, _ticket_scanner_dir)
-# Fallback: PYTHONPATH=/app/ticket-scanner (Railway env var)
-_env_path = os.environ.get("PYTHONPATH", "")
-if _env_path and _env_path not in sys.path:
-    sys.path.insert(0, _env_path)
 
 from flask import Flask, render_template, jsonify, request
 from datetime import datetime
@@ -21,10 +10,7 @@ from alerts.notifier import Notifier
 from portfolio.tracker import PortfolioTracker
 
 app = Flask(__name__)
-
-# DB beim Import initialisieren (auch unter gunicorn)
-from database.db import init_db as _init_db
-_init_db()
+init_db()
 
 decision_engine = DecisionEngine()
 notifier = Notifier()

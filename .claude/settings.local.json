@@ -37,7 +37,12 @@
       "Bash(start *)",
       "Bash(python -m pip install -r requirements.txt -q)",
       "Bash(python *)",
-      "Bash(git config *)"
+      "Bash(git config *)",
+      "Bash(cp -r database web/)",
+      "Bash(cp -r analyzers web/)",
+      "Bash(cp -r alerts web/)",
+      "Bash(cp -r portfolio web/)",
+      "Bash(cp -r scanners web/)"
     ]
   }
 }
