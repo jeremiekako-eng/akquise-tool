@@ -36,7 +36,8 @@
       "Bash(curl -s \"http://localhost:5002/api/events/1\")",
       "Bash(start *)",
       "Bash(python -m pip install -r requirements.txt -q)",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(git config *)"
     ]
   }
 }
