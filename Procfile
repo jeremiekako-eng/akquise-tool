@@ -1,1 +1,1 @@
-web: python web/app.py
+web: gunicorn --chdir ticket-scanner/web app:app

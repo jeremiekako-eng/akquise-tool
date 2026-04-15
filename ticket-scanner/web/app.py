@@ -12,6 +12,11 @@ from alerts.notifier import Notifier
 from portfolio.tracker import PortfolioTracker
 
 app = Flask(__name__)
+
+# DB beim Import initialisieren (auch unter gunicorn)
+from database.db import init_db as _init_db
+_init_db()
+
 decision_engine = DecisionEngine()
 notifier = Notifier()
 tracker = PortfolioTracker()
