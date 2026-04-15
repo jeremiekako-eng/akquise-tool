@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ticket Resale Scanner</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3350;
+    --text: #e2e8f0;
+    --text-dim: #64748b;
+    --green: #22c55e;
+    --green-dim: #166534;
+    --yellow: #f59e0b;
+    --yellow-dim: #78350f;
+    --red: #ef4444;
+    --red-dim: #7f1d1d;
+    --blue: #3b82f6;
+    --cyan: #06b6d4;
+    --accent: #6366f1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; }
+
+  /* Layout */
+  .app { display: flex; height: 100vh; overflow: hidden; }
+  .sidebar { width: 220px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* Sidebar */
+  .logo { padding: 20px 16px 16px; border-bottom: 1px solid var(--border); }
+  .logo h1 { font-size: 15px; font-weight: 700; color: var(--cyan); letter-spacing: .5px; }
+  .logo span { font-size: 11px; color: var(--text-dim); }
+  nav { flex: 1; padding: 12px 8px; }
+  nav a { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: var(--text-dim); text-decoration: none; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; margin-bottom: 2px; }
+  nav a:hover { background: var(--surface2); color: var(--text); }
+  nav a.active { background: var(--accent); color: #fff; }
+  nav a .badge { margin-left: auto; background: var(--red); color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 99px; font-weight: 700; }
+  .scan-btn { margin: 12px 8px; padding: 10px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity .15s; }
+  .scan-btn:hover { opacity: .85; }
+  .scan-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* Header */
+  .topbar { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; background: var(--surface); }
+  .topbar h2 { font-size: 16px; font-weight: 600; }
+  .topbar .spacer { flex: 1; }
+  .filters { display: flex; gap: 8px; align-items: center; }
+  .filters input, .filters select { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 6px; font-size: 13px; outline: none; }
+  .filters input:focus, .filters select:focus { border-color: var(--accent); }
+  .filter-pills { display: flex; gap: 4px; }
+  .pill { padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); color: var(--text-dim); background: transparent; transition: all .15s; }
+  .pill:hover { border-color: var(--accent); color: var(--text); }
+  .pill.active { color: #fff; border-color: transparent; }
+  .pill.all.active { background: var(--accent); }
+  .pill.buy.active { background: var(--green); }
+  .pill.maybe.active { background: var(--yellow); }
+  .pill.no.active { background: var(--red); }
+
+  /* Content */
+  .content { flex: 1; overflow-y: auto; padding: 0; }
+
+  /* Stats bar */
+  .stats-bar { display: flex; gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
+  .stat { flex: 1; background: var(--surface); padding: 14px 20px; }
+  .stat .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+  .stat .value { font-size: 22px; font-weight: 700; }
+  .stat.green .value { color: var(--green); }
+  .stat.yellow .value { color: var(--yellow); }
+  .stat.red .value { color: var(--red); }
+  .stat.blue .value { color: var(--cyan); }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; }
+  thead th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 1; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; cursor: pointer; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody td { padding: 11px 14px; white-space: nowrap; }
+  .event-name { font-weight: 500; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .event-meta { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+  /* Signal badges */
+  .badge-signal { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 700; letter-spacing: .5px; }
+  .badge-BUY { background: var(--green-dim); color: var(--green); }
+  .badge-MAYBE { background: var(--yellow-dim); color: var(--yellow); }
+  .badge-NO { background: #1e1e1e; color: var(--text-dim); }
+
+  /* Risk */
+  .badge-risk { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .risk-LOW { background: #052e16; color: var(--green); }
+  .risk-MEDIUM { background: #431407; color: var(--yellow); }
+  .risk-HIGH { background: #450a0a; color: var(--red); }
+
+  /* Demand bar */
+  .demand-bar { display: flex; align-items: center; gap: 6px; }
+  .bar-track { width: 60px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 2px; background: var(--cyan); }
+
+  /* Number colors */
+  .profit-pos { color: var(--green); font-weight: 600; }
+  .profit-neg { color: var(--red); font-weight: 600; }
+
+  /* Modal */
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100; justify-content: center; align-items: center; }
+  .overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; width: 620px; max-width: 95vw; max-height: 90vh; overflow-y: auto; }
+  .modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 12px; }
+  .modal-header .signal-big { font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 99px; flex-shrink: 0; margin-top: 2px; }
+  .modal-title { flex: 1; }
+  .modal-title h3 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .modal-title p { font-size: 12px; color: var(--text-dim); }
+  .modal-close { background: none; border: none; color: var(--text-dim); font-size: 20px; cursor: pointer; padding: 0 4px; }
+  .modal-close:hover { color: var(--text); }
+  .modal-body { padding: 20px 24px; }
+  .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .info-block { background: var(--surface2); border-radius: 8px; padding: 14px 16px; }
+  .info-block h4 { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+  .info-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; font-size: 13px; }
+  .info-row .key { color: var(--text-dim); }
+  .info-row .val { font-weight: 500; text-align: right; }
+  .reason-box { background: var(--surface2); border-radius: 8px; padding: 14px 16px; font-size: 13px; line-height: 1.6; color: var(--text-dim); margin-bottom: 12px; }
+  .reason-box strong { color: var(--text); }
+  .reason-headline { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .factor-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .factor { background: var(--surface2); border-radius: 8px; padding: 10px 14px; border-left: 3px solid var(--border); }
+  .factor.risk-high { border-left-color: var(--red); }
+  .factor.risk-med  { border-left-color: var(--yellow); }
+  .factor.risk-low  { border-left-color: var(--green); }
+  .factor-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .factor-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+  .factor-score { float: right; font-size: 11px; color: var(--text-dim); background: var(--border); padding: 1px 6px; border-radius: 4px; margin-left: 8px; }
+  .demand-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 12px; }
+  .demand-cell { background: var(--surface2); border-radius: 8px; padding: 10px 8px; text-align: center; }
+  .demand-cell .dc-val { font-size: 18px; font-weight: 700; color: var(--cyan); }
+  .demand-cell .dc-label { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+  .section-title { font-size: 11px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; margin: 14px 0 8px; }
+  /* Tooltip in table */
+  .reason-preview { font-size: 11px; color: var(--text-dim); margin-top: 3px; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .modal-actions { display: flex; gap: 8px; }
+  .btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: opacity .15s; }
+  .btn:hover { opacity: .85; }
+  .btn-primary { background: var(--green); color: #000; }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-link { background: none; border: none; color: var(--blue); font-size: 13px; font-weight: 500; cursor: pointer; padding: 8px 0; }
+
+  /* Views */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Portfolio */
+  .portfolio-summary { display: flex; gap: 1px; background: var(--border); border-bottom: 1px solid var(--border); }
+  .port-stat { flex: 1; background: var(--surface); padding: 16px 20px; }
+  .port-stat .label { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
+  .port-stat .value { font-size: 20px; font-weight: 700; }
+
+  /* Alerts */
+  .alerts-list { padding: 16px 20px; display: flex; flex-direction: column; gap: 12px; }
+  .alert-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; border-left: 3px solid var(--yellow); }
+  .alert-card.BUY { border-left-color: var(--green); }
+  .alert-card.MAYBE { border-left-color: var(--yellow); }
+  .alert-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .alert-card .meta { font-size: 12px; color: var(--text-dim); margin-bottom: 8px; }
+  .alert-card .msg { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 20px; right: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 13px; z-index: 200; animation: fadeIn .2s; max-width: 300px; }
+  .toast.success { border-left: 3px solid var(--green); }
+  .toast.error { border-left: 3px solid var(--red); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Empty state */
+  .empty { padding: 60px 20px; text-align: center; color: var(--text-dim); }
+  .empty .icon { font-size: 40px; margin-bottom: 12px; }
+
+  /* Spinner */
+  .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Sell form inline */
+  .sell-form { display: flex; gap: 8px; align-items: center; }
+  .sell-form input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 5px 8px; border-radius: 6px; width: 90px; font-size: 12px; outline: none; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <h1>Ticket Scanner</h1>
+      <span id="scanTime">Demo-Modus</span>
+    </div>
+    <nav>
+      <a class="active" data-view="events" onclick="showView('events', this)">
+        <span>📋</span> Events
+      </a>
+      <a data-view="alerts" onclick="showView('alerts', this)">
+        <span>🔔</span> Alerts
+        <span class="badge" id="alertBadge" style="display:none">0</span>
+      </a>
+      <a data-view="portfolio" onclick="showView('portfolio', this)">
+        <span>💼</span> Portfolio
+      </a>
+    </nav>
+    <button class="scan-btn" onclick="runScan()" id="scanBtn">▶ Scan starten</button>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- Events View -->
+    <div class="view active" id="view-events">
+      <div class="topbar">
+        <h2>Event-Scanner</h2>
+        <div class="spacer"></div>
+        <div class="filters">
+          <div class="filter-pills">
+            <button class="pill all active" onclick="setFilter('ALL', this)">Alle</button>
+            <button class="pill buy" onclick="setFilter('BUY', this)">BUY</button>
+            <button class="pill maybe" onclick="setFilter('MAYBE', this)">MAYBE</button>
+            <button class="pill no" onclick="setFilter('NO', this)">NO</button>
+          </div>
+          <input type="text" placeholder="Suchen..." id="searchInput" oninput="loadEvents()" style="width:160px">
+        </div>
+      </div>
+      <div class="stats-bar" id="statsBar">
+        <div class="stat"><div class="label">Events gesamt</div><div class="value" id="statTotal">–</div></div>
+        <div class="stat green"><div class="label">BUY-Deals</div><div class="value" id="statBuy">–</div></div>
+        <div class="stat yellow"><div class="label">MAYBE</div><div class="value" id="statMaybe">–</div></div>
+        <div class="stat blue"><div class="label">Alerts</div><div class="value" id="statAlerts">–</div></div>
+      </div>
+      <div class="content">
+        <div class="table-wrap">
+          <table id="eventsTable">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Datum</th>
+                <th>Stadt</th>
+                <th>Kaufpreis</th>
+                <th>Resale Avg</th>
+                <th>Profit</th>
+                <th>ROI</th>
+                <th>Demand</th>
+                <th>Risiko</th>
+                <th>Signal</th>
+              </tr>
+            </thead>
+            <tbody id="eventsTbody">
+              <tr><td colspan="10" class="empty"><div class="icon">⏳</div>Lade Events...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerts View -->
+    <div class="view" id="view-alerts">
+      <div class="topbar">
+        <h2>Alerts</h2>
+        <div class="spacer"></div>
+        <button class="btn btn-secondary" onclick="markAlertsRead()">Alle gelesen</button>
+      </div>
+      <div class="content">
+        <div class="alerts-list" id="alertsList">
+          <div class="empty"><div class="icon">🔔</div>Lade Alerts...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Portfolio View -->
+    <div class="view" id="view-portfolio">
+      <div class="topbar">
+        <h2>Portfolio & P&L</h2>
+      </div>
+      <div class="content">
+        <div class="portfolio-summary" id="portfolioSummary"></div>
+        <div class="table-wrap">
+          <table id="portfolioTable">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Datum</th>
+                <th>Menge</th>
+                <th>Kaufpreis</th>
+                <th>Investiert</th>
+                <th>Verkaufspreis</th>
+                <th>Profit</th>
+                <th>Status</th>
+                <th>Aktion</th>
+              </tr>
+            </thead>
+            <tbody id="portfolioTbody">
+              <tr><td colspan="9" class="empty"><div class="icon">💼</div>Noch keine Tickets im Portfolio.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Event Detail Modal -->
+<div class="overlay" id="eventModal" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">
+        <h3 id="modalTitle"></h3>
+        <p id="modalMeta"></p>
+      </div>
+      <span class="badge-signal signal-big" id="modalSignal"></span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="info-block">
+          <h4>Preise</h4>
+          <div class="info-row"><span class="key">Kaufpreis</span><span class="val" id="mBuyPrice"></span></div>
+          <div class="info-row"><span class="key">Resale Min</span><span class="val" id="mResaleMin"></span></div>
+          <div class="info-row"><span class="key">Resale Avg</span><span class="val" id="mResaleAvg"></span></div>
+          <div class="info-row"><span class="key">Resale Max</span><span class="val" id="mResaleMax"></span></div>
+          <div class="info-row"><span class="key">Listings</span><span class="val" id="mListings"></span></div>
+        </div>
+        <div class="info-block">
+          <h4>Analyse</h4>
+          <div class="info-row"><span class="key">Erwarteter Profit</span><span class="val" id="mProfit"></span></div>
+          <div class="info-row"><span class="key">ROI</span><span class="val" id="mRoi"></span></div>
+          <div class="info-row"><span class="key">Demand-Score</span><span class="val" id="mDemand"></span></div>
+          <div class="info-row"><span class="key">Risiko</span><span class="val" id="mRisk"></span></div>
+          <div class="info-row"><span class="key">Sellout-Wahrsch.</span><span class="val" id="mSellout"></span></div>
+          <div class="info-row"><span class="key">Personalisiert</span><span class="val" id="mPersonalized"></span></div>
+        </div>
+      </div>
+      <div class="section-title">Entscheidungs-Begründung</div>
+      <div class="reason-box" id="mReason"></div>
+
+      <div class="section-title">Demand-Score Aufschlüsselung</div>
+      <div class="demand-grid" id="mDemandBreakdown"></div>
+
+      <div id="mRiskFactorsSection" style="display:none">
+        <div class="section-title">Risikofaktoren</div>
+        <div class="factor-list" id="mRiskFactors"></div>
+      </div>
+
+      <div class="modal-actions" id="mActions"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Buy Modal -->
+<div class="overlay" id="buyModal" onclick="closeBuyModal(event)">
+  <div class="modal" style="width:420px" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title"><h3>Ticket kaufen</h3><p id="buyModalEvent"></p></div>
+      <button class="modal-close" onclick="closeBuyModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <label style="font-size:12px;color:var(--text-dim);display:block;margin-bottom:4px">Kaufpreis (€)</label>
+          <input type="number" id="buyPrice" step="0.01" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-size:14px;outline:none">
+        </div>
+        <div>
+          <label style="font-size:12px;color:var(--text-dim);display:block;margin-bottom:4px">Anzahl</label>
+          <input type="number" id="buyQty" value="1" min="1" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-size:14px;outline:none">
+        </div>
+        <div>
+          <label style="font-size:12px;color:var(--text-dim);display:block;margin-bottom:4px">Plattform</label>
+          <input type="text" id="buyPlatform" placeholder="z.B. Ticketmaster" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-size:14px;outline:none">
+        </div>
+        <div>
+          <label style="font-size:12px;color:var(--text-dim);display:block;margin-bottom:4px">Notizen</label>
+          <input type="text" id="buyNotes" placeholder="z.B. Reihe 5, Sitz 12" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-size:14px;outline:none">
+        </div>
+        <button class="btn btn-primary" style="width:100%;padding:10px" onclick="confirmBuy()">Kaufen & ins Portfolio</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let currentFilter = 'ALL';
+let currentEventId = null;
+let buyEventId = null;
+
+// ── Init ─────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadStats();
+  loadEvents();
+  setInterval(loadStats, 30000);
+});
+
+// ── Views ─────────────────────────────────────────────────
+function showView(name, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  el.classList.add('active');
+  if (name === 'alerts') loadAlerts();
+  if (name === 'portfolio') loadPortfolio();
+}
+
+// ── Stats ─────────────────────────────────────────────────
+async function loadStats() {
+  const r = await fetch('/api/stats');
+  const d = await r.json();
+  document.getElementById('statTotal').textContent = d.total_events;
+  document.getElementById('statBuy').textContent = d.buy;
+  document.getElementById('statMaybe').textContent = d.maybe;
+  document.getElementById('statAlerts').textContent = d.unread_alerts;
+  const badge = document.getElementById('alertBadge');
+  if (d.unread_alerts > 0) { badge.textContent = d.unread_alerts; badge.style.display = ''; }
+  else badge.style.display = 'none';
+  document.getElementById('scanTime').textContent = 'Stand: ' + new Date().toLocaleTimeString('de');
+}
+
+// ── Events ────────────────────────────────────────────────
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-pills .pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  loadEvents();
+}
+
+async function loadEvents() {
+  const search = document.getElementById('searchInput').value;
+  let url = `/api/events?decision=${currentFilter}&search=${encodeURIComponent(search)}`;
+  const r = await fetch(url);
+  const events = await r.json();
+  renderEvents(events);
+}
+
+function renderEvents(events) {
+  const tbody = document.getElementById('eventsTbody');
+  if (!events.length) {
+    tbody.innerHTML = '<tr><td colspan="10"><div class="empty"><div class="icon">🔍</div>Keine Events gefunden.</div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = events.map(e => {
+    const profitClass = e.expected_profit >= 0 ? 'profit-pos' : 'profit-neg';
+    const profitSign = e.expected_profit >= 0 ? '+' : '';
+    const riskClass = e.risk_score >= 60 ? 'HIGH' : e.risk_score >= 30 ? 'MEDIUM' : 'LOW';
+    const demandPct = Math.min(e.demand_score, 100);
+    const roiClass = e.expected_roi >= 30 ? 'profit-pos' : e.expected_roi >= 15 ? '' : 'profit-neg';
+    // Kurze Begründung aus decision_reason extrahieren (zweite Zeile)
+    const reasonShort = (e.decision_reason || '').split('\n').find(l => l.startsWith('->')) || '';
+    return `
+      <tr onclick="openEvent(${e.id})">
+        <td>
+          <div class="event-name">${esc(e.name)}</div>
+          <div class="event-meta">${esc(e.artist || e.category)}</div>
+          ${reasonShort ? `<div class="reason-preview">${esc(reasonShort.replace('->', '→'))}</div>` : ''}
+        </td>
+        <td>${e.event_date}</td>
+        <td>${esc(e.city)}</td>
+        <td>${e.primary_price_min > 0 ? e.primary_price_min.toFixed(0) + ' €' : '–'}</td>
+        <td>${e.resale_price_avg > 0 ? e.resale_price_avg.toFixed(0) + ' €' : '–'}</td>
+        <td class="${profitClass}">${e.expected_profit !== 0 ? profitSign + e.expected_profit.toFixed(2) + ' €' : '–'}</td>
+        <td class="${roiClass}">${e.expected_roi !== 0 ? e.expected_roi.toFixed(1) + '%' : '–'}</td>
+        <td>
+          <div class="demand-bar">
+            <div class="bar-track"><div class="bar-fill" style="width:${demandPct}%"></div></div>
+            <span style="font-size:12px">${e.demand_score.toFixed(0)}</span>
+          </div>
+        </td>
+        <td><span class="badge-risk risk-${riskClass}">${riskClass}</span></td>
+        <td><span class="badge-signal badge-${e.decision}">${e.decision}</span></td>
+      </tr>`;
+  }).join('');
+}
+
+// ── Event Detail ──────────────────────────────────────────
+async function openEvent(id) {
+  currentEventId = id;
+  const r = await fetch(`/api/events/${id}`);
+  const e = await r.json();
+  document.getElementById('modalTitle').textContent = e.name;
+  document.getElementById('modalMeta').textContent = `${e.artist ? e.artist + ' · ' : ''}${e.venue}, ${e.city} · ${e.event_date}`;
+  const sig = document.getElementById('modalSignal');
+  sig.textContent = e.decision;
+  sig.className = `badge-signal signal-big badge-${e.decision}`;
+  document.getElementById('mBuyPrice').textContent = e.primary_price_min > 0 ? e.primary_price_min.toFixed(2) + ' €' : '–';
+  document.getElementById('mResaleMin').textContent = e.resale_price_min > 0 ? e.resale_price_min.toFixed(2) + ' €' : '–';
+  document.getElementById('mResaleAvg').textContent = e.resale_price_avg > 0 ? e.resale_price_avg.toFixed(2) + ' €' : '–';
+  document.getElementById('mResaleMax').textContent = e.resale_price_max > 0 ? e.resale_price_max.toFixed(2) + ' €' : '–';
+  document.getElementById('mListings').textContent = e.resale_listings_count;
+  const prof = e.expected_profit;
+  document.getElementById('mProfit').innerHTML = `<span class="${prof >= 0 ? 'profit-pos' : 'profit-neg'}">${prof >= 0 ? '+' : ''}${prof.toFixed(2)} €</span>`;
+  document.getElementById('mRoi').innerHTML = `<span class="${e.expected_roi >= 30 ? 'profit-pos' : e.expected_roi < 0 ? 'profit-neg' : ''}">${e.expected_roi.toFixed(1)}%</span>`;
+  document.getElementById('mDemand').textContent = e.demand_score.toFixed(0) + '/100';
+  const riskClass = e.risk_score >= 60 ? 'HIGH' : e.risk_score >= 30 ? 'MEDIUM' : 'LOW';
+  document.getElementById('mRisk').innerHTML = `<span class="badge-risk risk-${riskClass}">${riskClass} (${e.risk_score.toFixed(0)})</span>`;
+  document.getElementById('mSellout').textContent = e.sellout_probability + '%';
+  document.getElementById('mPersonalized').innerHTML = e.is_personalized ? '<span style="color:var(--red)">JA ⚠️</span>' : '<span style="color:var(--green)">NEIN</span>';
+
+  // Begründung
+  const reason = e.decision_reason || '';
+  document.getElementById('mReason').innerHTML = reason.split('\n').map(l => {
+    if (l.startsWith('[')) return `<div style="font-weight:600;color:var(--text);margin-bottom:4px">${esc(l)}</div>`;
+    if (l.startsWith('->')) return `<div style="color:var(--text);margin-top:4px">${esc(l)}</div>`;
+    return `<div>${esc(l)}</div>`;
+  }).join('');
+
+  // Demand-Aufschlüsselung
+  const db = e.demand_breakdown || {};
+  const demandLabels = {artist:'Künstler', venue:'Venue', resale:'Resale-Aktivität', time:'Zeitdruck', premium:'Preisaufschlag'};
+  const demandMax =   {artist:35, venue:20, resale:25, time:15, premium:5};
+  document.getElementById('mDemandBreakdown').innerHTML = Object.entries(demandLabels).map(([k, label]) => {
+    const val = db[k] || 0;
+    const max = demandMax[k];
+    const pct = Math.round(val / max * 100);
+    const col = pct >= 70 ? 'var(--green)' : pct >= 40 ? 'var(--yellow)' : 'var(--text-dim)';
+    return `<div class="demand-cell">
+      <div class="dc-val" style="color:${col}">${val}</div>
+      <div style="font-size:9px;color:var(--border);margin:2px 0">/ ${max}</div>
+      <div class="dc-label">${label}</div>
+    </div>`;
+  }).join('');
+
+  // Risikofaktoren
+  const factors = e.risk_factors || [];
+  const rfSection = document.getElementById('mRiskFactorsSection');
+  if (factors.length > 0) {
+    rfSection.style.display = '';
+    document.getElementById('mRiskFactors').innerHTML = factors.map(f => {
+      const cls = f.score >= 25 ? 'risk-high' : f.score >= 10 ? 'risk-med' : 'risk-low';
+      return `<div class="factor ${cls}">
+        <div class="factor-name">
+          <span class="factor-score">-${f.score} Punkte</span>
+          ${esc(f.name)}
+        </div>
+        <div class="factor-desc">${esc(f.description)}</div>
+      </div>`;
+    }).join('');
+  } else {
+    rfSection.style.display = 'none';
+  }
+
+  const actions = document.getElementById('mActions');
+  actions.innerHTML = '';
+  if (e.decision !== 'NO') {
+    const buyBtn = document.createElement('button');
+    buyBtn.className = 'btn btn-primary';
+    buyBtn.textContent = '+ Ins Portfolio';
+    buyBtn.onclick = () => { closeModal(); openBuyModal(e); };
+    actions.appendChild(buyBtn);
+  }
+  if (e.primary_url) {
+    const linkBtn = document.createElement('button');
+    linkBtn.className = 'btn btn-link';
+    linkBtn.textContent = 'Zum Ticket-Shop ↗';
+    linkBtn.onclick = () => window.open(e.primary_url, '_blank');
+    actions.appendChild(linkBtn);
+  }
+  document.getElementById('eventModal').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('eventModal')) return;
+  document.getElementById('eventModal').classList.remove('open');
+}
+
+// ── Buy Modal ─────────────────────────────────────────────
+function openBuyModal(e) {
+  buyEventId = e.id;
+  document.getElementById('buyModalEvent').textContent = e.name;
+  document.getElementById('buyPrice').value = e.primary_price_min || '';
+  document.getElementById('buyQty').value = 1;
+  document.getElementById('buyPlatform').value = '';
+  document.getElementById('buyNotes').value = '';
+  document.getElementById('buyModal').classList.add('open');
+}
+
+function closeBuyModal(e) {
+  if (e && e.target !== document.getElementById('buyModal')) return;
+  document.getElementById('buyModal').classList.remove('open');
+}
+
+async function confirmBuy() {
+  const price = parseFloat(document.getElementById('buyPrice').value);
+  if (!price || price <= 0) { showToast('Bitte gültigen Kaufpreis eingeben.', 'error'); return; }
+  const r = await fetch('/api/portfolio/add', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      event_id: buyEventId,
+      buy_price: price,
+      quantity: parseInt(document.getElementById('buyQty').value) || 1,
+      platform: document.getElementById('buyPlatform').value,
+      notes: document.getElementById('buyNotes').value,
+    })
+  });
+  const d = await r.json();
+  if (d.status === 'ok') {
+    closeBuyModal();
+    showToast('Ticket ins Portfolio aufgenommen!', 'success');
+  } else {
+    showToast('Fehler: ' + d.message, 'error');
+  }
+}
+
+// ── Alerts ────────────────────────────────────────────────
+async function loadAlerts() {
+  const r = await fetch('/api/alerts');
+  const alerts = await r.json();
+  const el = document.getElementById('alertsList');
+  if (!alerts.length) {
+    el.innerHTML = '<div class="empty"><div class="icon">✅</div>Keine neuen Alerts.</div>';
+    return;
+  }
+  el.innerHTML = alerts.map(a => `
+    <div class="alert-card ${a.decision}">
+      <h4>${esc(a.event)} <span class="badge-signal badge-${a.decision}" style="font-size:11px">${a.decision}</span></h4>
+      <div class="meta">${a.city} · ${a.event_date} · ${a.created_at}</div>
+      <div style="display:flex;gap:16px;margin:8px 0;font-size:13px">
+        <span>Profit: <strong class="profit-pos">+${a.profit.toFixed(2)} €</strong></span>
+        <span>ROI: <strong>${a.roi.toFixed(1)}%</strong></span>
+      </div>
+      <div class="msg">${esc(a.message)}</div>
+    </div>`).join('');
+}
+
+async function markAlertsRead() {
+  await fetch('/api/alerts/read', {method: 'POST'});
+  loadAlerts();
+  loadStats();
+  showToast('Alle Alerts als gelesen markiert.', 'success');
+}
+
+// ── Portfolio ─────────────────────────────────────────────
+async function loadPortfolio() {
+  const r = await fetch('/api/portfolio');
+  const d = await r.json();
+  renderPortfolioSummary(d.summary);
+  renderPortfolioTable(d.entries);
+}
+
+function renderPortfolioSummary(s) {
+  document.getElementById('portfolioSummary').innerHTML = `
+    <div class="port-stat"><div class="label">Im Bestand</div><div class="value">${s.total_tickets_holding} Tickets</div></div>
+    <div class="port-stat"><div class="label">Investiert</div><div class="value">${s.total_invested_holding.toFixed(2)} €</div></div>
+    <div class="port-stat"><div class="label">Unrealisiert</div><div class="value" style="color:var(--cyan)">${s.unrealized_profit_estimate >= 0 ? '+' : ''}${s.unrealized_profit_estimate.toFixed(2)} €</div></div>
+    <div class="port-stat"><div class="label">Verkauft</div><div class="value">${s.total_tickets_sold} Tickets</div></div>
+    <div class="port-stat"><div class="label">Realisierter Profit</div><div class="value" style="color:var(--green)">${s.total_realized_profit >= 0 ? '+' : ''}${s.total_realized_profit.toFixed(2)} €</div></div>
+    <div class="port-stat"><div class="label">Gesamt ROI</div><div class="value">${s.total_realized_roi.toFixed(1)}%</div></div>
+  `;
+}
+
+function renderPortfolioTable(entries) {
+  const tbody = document.getElementById('portfolioTbody');
+  if (!entries.length) {
+    tbody.innerHTML = '<tr><td colspan="9"><div class="empty"><div class="icon">💼</div>Noch keine Tickets. Klicke auf ein BUY-Event und füge es hinzu.</div></td></tr>';
+    return;
+  }
+  tbody.innerHTML = entries.map(p => {
+    const profitStr = p.actual_profit !== null ? (p.actual_profit >= 0 ? '+' : '') + p.actual_profit.toFixed(2) + ' €' : '–';
+    const profitClass = p.actual_profit === null ? '' : p.actual_profit >= 0 ? 'profit-pos' : 'profit-neg';
+    const statusColor = {holding:'var(--yellow)', sold:'var(--green)', listed:'var(--cyan)'}[p.status] || 'var(--text-dim)';
+    const sellAction = p.status === 'holding' ? `
+      <div class="sell-form">
+        <input type="number" placeholder="Preis €" id="sellPrice_${p.id}" step="0.01">
+        <button class="btn btn-secondary" style="padding:4px 10px;font-size:11px" onclick="sellTicket(${p.id})">Verkauft</button>
+      </div>` : '–';
+    return `
+      <tr>
+        <td><div class="event-name">${esc(p.event)}</div></td>
+        <td>${p.event_date}</td>
+        <td>${p.quantity}</td>
+        <td>${p.buy_price.toFixed(2)} €</td>
+        <td>${p.total_invested.toFixed(2)} €</td>
+        <td>${p.sell_price ? p.sell_price.toFixed(2) + ' €' : '–'}</td>
+        <td class="${profitClass}">${profitStr}</td>
+        <td><span style="color:${statusColor};font-weight:600;font-size:12px">${p.status.toUpperCase()}</span></td>
+        <td>${sellAction}</td>
+      </tr>`;
+  }).join('');
+}
+
+async function sellTicket(entryId) {
+  const price = parseFloat(document.getElementById(`sellPrice_${entryId}`).value);
+  if (!price || price <= 0) { showToast('Bitte Verkaufspreis eingeben.', 'error'); return; }
+  const r = await fetch('/api/portfolio/sell', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({entry_id: entryId, sell_price: price, platform: 'stubhub'})
+  });
+  const d = await r.json();
+  if (d.status === 'ok') {
+    const profit = d.profit || 0;
+    showToast(`Verkauft! Profit: ${profit >= 0 ? '+' : ''}${profit.toFixed(2)} €`, 'success');
+    loadPortfolio();
+  } else {
+    showToast('Fehler: ' + d.message, 'error');
+  }
+}
+
+// ── Scan ─────────────────────────────────────────────────
+async function runScan() {
+  const btn = document.getElementById('scanBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Scannt...';
+  try {
+    const r = await fetch('/api/scan', {method: 'POST'});
+    const d = await r.json();
+    if (d.status === 'error') {
+      showToast('Fehler: ' + d.message, 'error');
+    } else {
+      const msg = d.status === 'demo'
+        ? 'Demo-Modus: ' + d.message
+        : `${d.count} Events · ${d.buy} BUY · ${d.maybe} MAYBE`;
+      showToast(msg, 'success');
+      loadEvents();
+      loadStats();
+    }
+  } catch (e) {
+    showToast('Verbindungsfehler.', 'error');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '▶ Scan starten';
+}
+
+// ── Helpers ───────────────────────────────────────────────
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function showToast(msg, type = 'success') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+</script>
+</body>
+</html>

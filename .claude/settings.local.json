@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd:*)",
+      "Bash(powershell:*)",
+      "Bash(pip install *)",
+      "Bash(python -m pip install -q -r requirements.txt)",
+      "Bash(python -m pip install -q requests sqlalchemy rich schedule python-dotenv httpx pydantic click aiohttp)",
+      "Bash(python main.py scan)",
+      "Bash(python -c ' *)",
+      "Bash(python -m pip install -q flask)",
+      "Bash(python web/app.py)",
+      "Bash(curl -s http://localhost:5000/api/stats)",
+      "Bash(curl -s http://localhost:5000/)",
+      "Bash(curl -v http://localhost:5000/api/events)",
+      "Bash(pkill -f \"python web/app.py\")",
+      "Bash(pkill -f \"web/app.py\")",
+      "Bash(pkill -f \"flask\")",
+      "Bash(python -c \"import socket; s=socket.socket\\(\\); s.connect\\(\\('localhost',5000\\)\\); print\\('PORT BUSY'\\)\")",
+      "Bash(netstat -ano)",
+      "Bash(PORT=5001 python web/app.py)",
+      "Bash(curl -s http://localhost:5001/api/stats)",
+      "Bash(curl -s http://localhost:5001/api/events)",
+      "Bash(python -m json.tool)",
+      "Bash(curl -s http://localhost:5001/api/events/1)",
+      "Bash(curl -s \"http://localhost:5001/api/events/1\")",
+      "Bash(find \"C:\\\\Users\\\\Jeremie\\\\Neuer Ordner\\\\ticket-scanner\" -name \"*.pyc\" -delete)",
+      "Bash(find \"C:\\\\Users\\\\Jeremie\\\\Neuer Ordner\\\\ticket-scanner\" -name \"__pycache__\" -type d -exec rm -rf {} +)",
+      "Bash(python -c \"import socket; s=socket.socket\\(\\); r=s.connect_ex\\(\\('localhost',5001\\)\\); print\\('5001 open' if r==0 else '5001 closed'\\); s.close\\(\\)\")",
+      "Bash(curl -s \"http://localhost:5001/api/events/2\")",
+      "Bash(taskkill /F /IM python.exe)",
+      "Bash(python -c \"import socket; s=socket.socket\\(\\); r=s.connect_ex\\(\\('localhost',5001\\)\\); print\\('5001:', 'belegt' if r==0 else 'frei'\\); s.close\\(\\)\")",
+      "Bash(PORT=5002 python web/app.py)",
+      "Bash(curl -s \"http://localhost:5002/api/events/2\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('risk_factors' in d, 'demand_breakdown' in d, len\\(d.get\\('risk_factors',[]\\)\\)\\)\")",
+      "Bash(curl -s \"http://localhost:5002/api/events/1\")",
+      "Bash(start *)",
+      "Bash(python -m pip install -r requirements.txt -q)",
+      "Bash(python *)"
+    ]
+  }
+}

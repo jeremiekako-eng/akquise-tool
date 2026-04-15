@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Die Nordmänner – Spedition & Transport</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #0d1b2a;
+      --dark:   #152030;
+      --card:   #1a2a3a;
+      --gold:   #e8a020;
+      --gold2:  #f5bc50;
+      --white:  #f0f4f8;
+      --gray:   #8a9bb0;
+      --radius: 12px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 80px;
+      background: rgba(13,27,42,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(232,160,32,0.15);
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo img { height: 60px; width: auto; object-fit: contain; }
+    .nav-logo span {
+      font-size: 1.1rem; font-weight: 700; color: var(--white); letter-spacing: 0.5px;
+    }
+    .nav-logo span em { color: var(--gold); font-style: normal; }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--gray); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-right { display: flex; align-items: center; gap: 16px; }
+
+    .lang-toggle {
+      display: flex; gap: 4px; background: var(--card);
+      border-radius: 20px; padding: 3px;
+    }
+    .lang-toggle button {
+      border: none; background: transparent; color: var(--gray);
+      font-size: 0.8rem; font-weight: 600; padding: 4px 12px;
+      border-radius: 16px; cursor: pointer; transition: all 0.2s;
+    }
+    .lang-toggle button.active {
+      background: var(--gold); color: var(--navy);
+    }
+
+    .nav-cta {
+      background: var(--gold); color: var(--navy);
+      border: none; padding: 9px 20px; border-radius: 8px;
+      font-weight: 700; font-size: 0.85rem; cursor: pointer;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--gold2); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; padding: 120px 5% 80px;
+      position: relative; overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 60%, rgba(232,160,32,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 30%, rgba(21,32,48,0.9) 0%, transparent 70%);
+    }
+
+    /* Grid background lines */
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(232,160,32,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,160,32,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 800px; }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(232,160,32,0.12); border: 1px solid rgba(232,160,32,0.3);
+      border-radius: 20px; padding: 6px 16px; margin-bottom: 28px;
+      font-size: 0.8rem; font-weight: 600; color: var(--gold); letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .hero-badge::before {
+      content: ''; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold); animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      font-weight: 800; line-height: 1.1;
+      margin-bottom: 20px; letter-spacing: -1px;
+    }
+    h1 span { color: var(--gold); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--gray); margin-bottom: 40px; max-width: 560px; margin-left: auto; margin-right: auto;
+    }
+
+    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--gold); color: var(--navy);
+      padding: 14px 32px; border-radius: 10px;
+      font-weight: 700; font-size: 0.95rem; text-decoration: none;
+      transition: all 0.2s; border: none; cursor: pointer;
+    }
+    .btn-primary:hover { background: var(--gold2); transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent; color: var(--white);
+      padding: 14px 32px; border-radius: 10px;
+      font-weight: 600; font-size: 0.95rem; text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex; gap: 48px; justify-content: center; flex-wrap: wrap;
+      margin-top: 64px; padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 800; color: var(--gold); }
+    .stat-label { font-size: 0.8rem; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── SECTIONS ── */
+    section { padding: 90px 5%; }
+
+    .section-label {
+      font-size: 0.75rem; font-weight: 700; color: var(--gold);
+      text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800; line-height: 1.2; margin-bottom: 16px;
+    }
+    .section-title span { color: var(--gold); }
+    .section-desc { color: var(--gray); max-width: 540px; font-size: 1rem; line-height: 1.7; }
+
+    /* ── SERVICES ── */
+    #services { background: var(--dark); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px; margin-top: 52px;
+    }
+
+    .service-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+    }
+    .service-card:hover { transform: translateY(-6px); border-color: rgba(232,160,32,0.25); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-icon {
+      width: 52px; height: 52px; background: rgba(232,160,32,0.12);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      margin-bottom: 20px; font-size: 1.5rem;
+    }
+    .service-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; }
+    .service-card p { color: var(--gray); font-size: 0.9rem; line-height: 1.6; }
+
+    /* ── ABOUT ── */
+    #about {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+
+    .about-visual {
+      position: relative; border-radius: 20px; overflow: hidden;
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 400px;
+    }
+
+    .about-truck-svg { width: 80%; max-width: 380px; }
+
+    .about-badge {
+      position: absolute; bottom: 24px; left: 24px;
+      background: var(--gold); color: var(--navy);
+      border-radius: 10px; padding: 12px 18px;
+      font-weight: 700; font-size: 0.85rem;
+    }
+
+    .about-features { margin-top: 32px; display: flex; flex-direction: column; gap: 16px; }
+    .feature {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px; background: var(--card);
+      border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+    }
+    .feature-icon {
+      width: 36px; height: 36px; min-width: 36px;
+      background: rgba(232,160,32,0.12); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .feature h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 2px; }
+    .feature p { font-size: 0.82rem; color: var(--gray); }
+
+    /* ── PROCESS ── */
+    #process { background: var(--dark); }
+
+    .process-steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0; margin-top: 52px; position: relative;
+    }
+
+    .process-step {
+      padding: 32px 24px; text-align: center; position: relative;
+    }
+    .process-step:not(:last-child)::after {
+      content: '→';
+      position: absolute; right: -12px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold); font-size: 1.4rem;
+      z-index: 1;
+    }
+
+    .step-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(232,160,32,0.12); border: 2px solid var(--gold);
+      font-size: 1.1rem; font-weight: 800; color: var(--gold);
+      margin: 0 auto 16px;
+    }
+    .process-step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .process-step p { font-size: 0.85rem; color: var(--gray); }
+
+    /* ── CONTACT ── */
+    #contact {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: start;
+    }
+
+    .contact-info { }
+    .contact-item {
+      display: flex; align-items: center; gap: 14px;
+      margin-top: 20px; color: var(--gray); font-size: 0.9rem;
+    }
+    .contact-icon {
+      width: 40px; height: 40px; background: rgba(232,160,32,0.12);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .contact-item strong { display: block; color: var(--white); font-size: 0.85rem; }
+
+    form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    input, textarea, select {
+      background: var(--card); border: 1px solid rgba(255,255,255,0.1);
+      color: var(--white); border-radius: 10px; padding: 13px 16px;
+      font-family: inherit; font-size: 0.9rem; width: 100%;
+      transition: border-color 0.2s;
+    }
+    input::placeholder, textarea::placeholder { color: var(--gray); }
+    input:focus, textarea:focus, select:focus {
+      outline: none; border-color: var(--gold);
+    }
+    textarea { resize: vertical; min-height: 120px; }
+    select option { background: var(--card); }
+
+    .form-submit {
+      background: var(--gold); color: var(--navy);
+      border: none; padding: 14px; border-radius: 10px;
+      font-weight: 700; font-size: 0.95rem; cursor: pointer;
+      transition: all 0.2s; width: 100%;
+    }
+    .form-submit:hover { background: var(--gold2); transform: translateY(-2px); }
+
+    .form-note { font-size: 0.78rem; color: var(--gray); text-align: center; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080f18;
+      padding: 48px 5% 28px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 32px; margin-bottom: 40px;
+    }
+    .footer-brand p { color: var(--gray); font-size: 0.85rem; margin-top: 10px; max-width: 280px; }
+    .footer-links h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 14px; color: var(--white); }
+    .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .footer-links a { color: var(--gray); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 24px; display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-bottom p { color: var(--gray); font-size: 0.8rem; }
+
+    /* ── HAMBURGER ── */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none; position: fixed; top: 80px; left: 0; right: 0;
+      background: rgba(13,27,42,0.98); backdrop-filter: blur(16px);
+      padding: 24px 5% 32px; z-index: 99;
+      border-bottom: 1px solid rgba(232,160,32,0.15);
+      flex-direction: column; gap: 8px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--white); text-decoration: none; font-size: 1.1rem;
+      font-weight: 600; padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu .mobile-cta {
+      margin-top: 12px; background: var(--gold); color: var(--navy);
+      text-align: center; padding: 14px; border-radius: 10px;
+      font-weight: 700; font-size: 1rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      #about, #contact { grid-template-columns: 1fr; gap: 48px; }
+      .about-visual { min-height: 260px; }
+      .process-step:not(:last-child)::after { display: none; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      section { padding: 70px 5%; }
+    }
+
+    @media (max-width: 600px) {
+      .form-row { grid-template-columns: 1fr; }
+      .hero-stats { gap: 20px; }
+      nav { padding: 0 4%; height: 70px; }
+      .mobile-menu { top: 70px; }
+      .nav-logo img { height: 48px; }
+      .nav-cta { display: none; }
+      section { padding: 60px 4%; }
+      .services-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      .hero-stats { flex-direction: row; justify-content: space-around; }
+      .footer-top { flex-direction: column; gap: 24px; }
+      .footer-links { width: 100%; }
+    }
+
+    @media (max-width: 380px) {
+      .process-steps { grid-template-columns: 1fr; }
+      .lang-toggle { display: none; }
+    }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">
+    <img src="logo.svg" alt="Die Nordmänner Logo" />
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#services" data-de="Leistungen" data-en="Services">Leistungen</a></li>
+    <li><a href="#about" data-de="Über uns" data-en="About">Über uns</a></li>
+    <li><a href="#process" data-de="Ablauf" data-en="Process">Ablauf</a></li>
+    <li><a href="#contact" data-de="Kontakt" data-en="Contact">Kontakt</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button id="btn-de" class="active" onclick="setLang('de')">DE</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+    <a href="#contact" class="nav-cta" data-de="Anfrage senden" data-en="Get a Quote">Anfrage senden</a>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menü">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" onclick="toggleMenu()" data-de="Leistungen" data-en="Services">Leistungen</a>
+  <a href="#about" onclick="toggleMenu()" data-de="Über uns" data-en="About">Über uns</a>
+  <a href="#process" onclick="toggleMenu()" data-de="Ablauf" data-en="Process">Ablauf</a>
+  <a href="#contact" onclick="toggleMenu()" data-de="Kontakt" data-en="Contact">Kontakt</a>
+  <a href="#contact" onclick="toggleMenu()" class="mobile-cta" data-de="Anfrage senden →" data-en="Get a Quote →">Anfrage senden →</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content reveal">
+    <div class="hero-badge" data-de="Zuverlässig. Pünktlich. Stark." data-en="Reliable. On Time. Strong.">
+      Zuverlässig. Pünktlich. Stark.
+    </div>
+    <h1 data-de="Ihr Transport.<br><span>Unsere Stärke.</span>" data-en="Your Cargo.<br><span>Our Strength.</span>">
+      Ihr Transport.<br><span>Unsere Stärke.</span>
+    </h1>
+    <p class="hero-sub" data-de="Die Nordmänner bringen Ihre Ware sicher ans Ziel — zuverlässig, pünktlich und mit dem Einsatz echter Profis." data-en="Die Nordmänner deliver your goods safely to the destination — reliable, on time, and with true professional dedication.">
+      Die Nordmänner bringen Ihre Ware sicher ans Ziel — zuverlässig, pünktlich und mit dem Einsatz echter Profis.
+    </p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary" data-de="Jetzt anfragen" data-en="Request a Quote">Jetzt anfragen</a>
+      <a href="#services" class="btn-outline" data-de="Unsere Leistungen" data-en="Our Services">Unsere Leistungen</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label" data-de="Zuverlässigkeit" data-en="Reliability">Zuverlässigkeit</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">DE</div>
+        <div class="stat-label" data-de="Bundesweit" data-en="Nationwide">Bundesweit</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">24h</div>
+        <div class="stat-label" data-de="Reaktionszeit" data-en="Response Time">Reaktionszeit</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="reveal">
+    <p class="section-label" data-de="Was wir tun" data-en="What We Do">Was wir tun</p>
+    <h2 class="section-title" data-de="Unsere <span>Leistungen</span>" data-en="Our <span>Services</span>">Unsere <span>Leistungen</span></h2>
+    <p class="section-desc" data-de="Von der Expresslieferung bis zur Komplettplanung — wir kümmern uns um Ihren Transport." data-en="From express delivery to full logistics planning — we handle your transport needs.">
+      Von der Expresslieferung bis zur Komplettplanung — wir kümmern uns um Ihren Transport.
+    </p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-icon">🚚</div>
+      <h3 data-de="Kurier & Expresslieferung" data-en="Courier & Express Delivery">Kurier & Expresslieferung</h3>
+      <p data-de="Schnelle, direkte Lieferung Ihrer Sendungen. Zeitkritische Transporte mit garantierter Pünktlichkeit." data-en="Fast, direct delivery of your shipments. Time-critical transports with guaranteed punctuality.">
+        Schnelle, direkte Lieferung Ihrer Sendungen. Zeitkritische Transporte mit garantierter Pünktlichkeit.
+      </p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📦</div>
+      <h3 data-de="Stückgut & Pakete" data-en="Parcels & Pallets">Stückgut & Pakete</h3>
+      <p data-de="Einzelne Pakete bis zu Palettenware — sicher verpackt und termingerecht zugestellt." data-en="Single parcels to pallet freight — safely packed and delivered on schedule.">
+        Einzelne Pakete bis zu Palettenware — sicher verpackt und termingerecht zugestellt.
+      </p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏢</div>
+      <h3 data-de="Umzüge & Bürotransporte" data-en="Relocations & Office Moves">Umzüge & Bürotransporte</h3>
+      <p data-de="Privat- und Geschäftsumzüge mit professioneller Planung und schonender Behandlung Ihrer Güter." data-en="Private and commercial moves with professional planning and careful handling of your goods.">
+        Privat- und Geschäftsumzüge mit professioneller Planung und schonender Behandlung Ihrer Güter.
+      </p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔧</div>
+      <h3 data-de="Sperrgut & Sondertransporte" data-en="Oversized & Special Freight">Sperrgut & Sondertransporte</h3>
+      <p data-de="Auch ungewöhnliche Ladungen sind kein Problem — wir finden die passende Lösung für Ihr Transportgut." data-en="Even unusual loads are no problem — we find the right solution for your freight.">
+        Auch ungewöhnliche Ladungen sind kein Problem — wir finden die passende Lösung für Ihr Transportgut.
+      </p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🗺️</div>
+      <h3 data-de="Regionale & Überregionale Touren" data-en="Regional & Long-Distance Routes">Regionale & Überregionale Touren</h3>
+      <p data-de="Ob innerhalb der Stadt oder quer durch Deutschland — wir kennen die Wege und bringen Ihre Ware ans Ziel." data-en="Whether local or cross-country — we know the routes and get your goods there.">
+        Ob innerhalb der Stadt oder quer durch Deutschland — wir kennen die Wege und bringen Ihre Ware ans Ziel.
+      </p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📋</div>
+      <h3 data-de="Transportplanung auf Anfrage" data-en="Custom Transport Planning">Transportplanung auf Anfrage</h3>
+      <p data-de="Spezielle Anforderungen? Wir planen individuelle Transportlösungen — persönlich und unkompliziert." data-en="Special requirements? We plan individual transport solutions — personal and straightforward.">
+        Spezielle Anforderungen? Wir planen individuelle Transportlösungen — persönlich und unkompliziert.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-visual reveal">
+    <!-- Truck SVG illustration -->
+    <svg class="about-truck-svg" viewBox="0 0 400 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Road -->
+      <rect x="0" y="185" width="400" height="35" fill="#0d1b2a" rx="4"/>
+      <rect x="60" y="199" width="40" height="6" fill="#e8a020" rx="3" opacity="0.6"/>
+      <rect x="170" y="199" width="40" height="6" fill="#e8a020" rx="3" opacity="0.6"/>
+      <rect x="280" y="199" width="40" height="6" fill="#e8a020" rx="3" opacity="0.6"/>
+      <!-- Trailer -->
+      <rect x="20" y="100" width="230" height="90" fill="#1a2a3a" rx="8" stroke="#e8a020" stroke-width="1.5"/>
+      <!-- Logo on trailer -->
+      <text x="90" y="155" font-family="Inter,sans-serif" font-weight="900" font-size="30" fill="#e8a020" opacity="0.9">NORDMÄNNER</text>
+      <!-- Cab -->
+      <rect x="250" y="120" width="120" height="70" fill="#152030" rx="8" stroke="#e8a020" stroke-width="1.5"/>
+      <!-- Windshield -->
+      <rect x="300" y="128" width="60" height="38" fill="#0d2a44" rx="5" stroke="#e8a020" stroke-width="1" opacity="0.8"/>
+      <!-- Headlight -->
+      <circle cx="368" cy="175" r="7" fill="#e8a020" opacity="0.9"/>
+      <ellipse cx="368" cy="175" rx="12" ry="7" fill="#e8a020" opacity="0.15"/>
+      <!-- Wheels -->
+      <circle cx="80"  cy="186" r="20" fill="#0d1b2a" stroke="#e8a020" stroke-width="2"/>
+      <circle cx="80"  cy="186" r="9"  fill="#1a2a3a" stroke="#e8a020" stroke-width="1.5"/>
+      <circle cx="200" cy="186" r="20" fill="#0d1b2a" stroke="#e8a020" stroke-width="2"/>
+      <circle cx="200" cy="186" r="9"  fill="#1a2a3a" stroke="#e8a020" stroke-width="1.5"/>
+      <circle cx="305" cy="186" r="18" fill="#0d1b2a" stroke="#e8a020" stroke-width="2"/>
+      <circle cx="305" cy="186" r="8"  fill="#1a2a3a" stroke="#e8a020" stroke-width="1.5"/>
+      <circle cx="360" cy="186" r="18" fill="#0d1b2a" stroke="#e8a020" stroke-width="2"/>
+      <circle cx="360" cy="186" r="8"  fill="#1a2a3a" stroke="#e8a020" stroke-width="1.5"/>
+      <!-- Speed lines -->
+      <line x1="0"  y1="145" x2="18" y2="145" stroke="#e8a020" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+      <line x1="0"  y1="158" x2="14" y2="158" stroke="#e8a020" stroke-width="1.5" opacity="0.25" stroke-linecap="round"/>
+      <line x1="0"  y1="170" x2="10" y2="170" stroke="#e8a020" stroke-width="1" opacity="0.15" stroke-linecap="round"/>
+    </svg>
+    <div class="about-badge" data-de="Gegründet 2024 · Nordmänner" data-en="Founded 2024 · Nordmänner">
+      Gegründet 2024 · Nordmänner
+    </div>
+  </div>
+
+  <div class="reveal">
+    <p class="section-label" data-de="Wer wir sind" data-en="Who We Are">Wer wir sind</p>
+    <h2 class="section-title" data-de="Klein, aber <span>stark</span>" data-en="Small, but <span>strong</span>">Klein, aber <span>stark</span></h2>
+    <p class="section-desc" data-de="Wir stehen noch am Anfang — aber mit vollem Einsatz, Verlässlichkeit und dem Antrieb zu wachsen. Jeder Auftrag ist uns wichtig, jede Lieferung behandeln wir wie unsere eigene." data-en="We are just getting started — but with full commitment, reliability, and the drive to grow. Every order matters to us, every delivery we treat as our own.">
+      Wir stehen noch am Anfang — aber mit vollem Einsatz, Verlässlichkeit und dem Antrieb zu wachsen. Jeder Auftrag ist uns wichtig, jede Lieferung behandeln wir wie unsere eigene.
+    </p>
+
+    <div class="about-features">
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <div>
+          <h4 data-de="Schnelle Reaktion" data-en="Fast Response">Schnelle Reaktion</h4>
+          <p data-de="Kurze Kommunikationswege — wir reagieren direkt und unkompliziert auf Ihre Anfragen." data-en="Short communication paths — we respond directly and without hassle to your requests.">
+            Kurze Kommunikationswege — wir reagieren direkt und unkompliziert auf Ihre Anfragen.
+          </p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🤝</div>
+        <div>
+          <h4 data-de="Persönlicher Service" data-en="Personal Service">Persönlicher Service</h4>
+          <p data-de="Kein Callcenter, kein Ticket-System — Sie sprechen direkt mit uns." data-en="No call center, no ticket system — you speak directly with us.">
+            Kein Callcenter, kein Ticket-System — Sie sprechen direkt mit uns.
+          </p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🛡️</div>
+        <div>
+          <h4 data-de="Vollständig versichert" data-en="Fully Insured">Vollständig versichert</h4>
+          <p data-de="Ihre Ware ist bei uns versichert und in guten Händen — vom Abholort bis zur Übergabe." data-en="Your goods are insured and in good hands — from pickup to delivery.">
+            Ihre Ware ist bei uns versichert und in guten Händen — vom Abholort bis zur Übergabe.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="reveal" style="text-align:center; max-width: 600px; margin: 0 auto;">
+    <p class="section-label" data-de="So läuft es ab" data-en="How It Works">So läuft es ab</p>
+    <h2 class="section-title" data-de="Einfach & <span>transparent</span>" data-en="Simple & <span>transparent</span>">Einfach & <span>transparent</span></h2>
+    <p class="section-desc" style="margin:0 auto;" data-de="Kein komplizierter Prozess — in wenigen Schritten ist Ihr Transport organisiert." data-en="No complicated process — your transport is organized in just a few steps.">
+      Kein komplizierter Prozess — in wenigen Schritten ist Ihr Transport organisiert.
+    </p>
+  </div>
+  <div class="process-steps reveal">
+    <div class="process-step">
+      <div class="step-num">1</div>
+      <h3 data-de="Anfrage stellen" data-en="Submit Request">Anfrage stellen</h3>
+      <p data-de="Kontaktieren Sie uns per Formular, Telefon oder E-Mail mit Ihren Transportdaten." data-en="Contact us via form, phone, or email with your transport details.">
+        Kontaktieren Sie uns per Formular, Telefon oder E-Mail mit Ihren Transportdaten.
+      </p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">2</div>
+      <h3 data-de="Angebot erhalten" data-en="Receive Quote">Angebot erhalten</h3>
+      <p data-de="Sie erhalten schnell ein klares, faires Angebot — ohne versteckte Kosten." data-en="You receive a quick, clear, and fair quote — no hidden costs.">
+        Sie erhalten schnell ein klares, faires Angebot — ohne versteckte Kosten.
+      </p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">3</div>
+      <h3 data-de="Termin bestätigen" data-en="Confirm Date">Termin bestätigen</h3>
+      <p data-de="Wir vereinbaren gemeinsam einen passenden Abholtermin — flexibel und zuverlässig." data-en="We agree on a suitable pickup date together — flexible and reliable.">
+        Wir vereinbaren gemeinsam einen passenden Abholtermin — flexibel und zuverlässig.
+      </p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">4</div>
+      <h3 data-de="Lieferung erfolgt" data-en="Delivery Done">Lieferung erfolgt</h3>
+      <p data-de="Wir transportieren Ihre Ware sicher ans Ziel — pünktlich und professionell." data-en="We transport your goods safely to the destination — punctual and professional.">
+        Wir transportieren Ihre Ware sicher ans Ziel — pünktlich und professionell.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info reveal">
+    <p class="section-label" data-de="Kontakt" data-en="Contact">Kontakt</p>
+    <h2 class="section-title" data-de="Schreiben Sie <span>uns</span>" data-en="Get in <span>Touch</span>">Schreiben Sie <span>uns</span></h2>
+    <p class="section-desc" data-de="Haben Sie eine Transportanfrage? Wir melden uns so schnell wie möglich bei Ihnen." data-en="Have a transport request? We will get back to you as soon as possible.">
+      Haben Sie eine Transportanfrage? Wir melden uns so schnell wie möglich bei Ihnen.
+    </p>
+
+    <div class="contact-item">
+      <div class="contact-icon">📧</div>
+      <div>
+        <strong data-de="E-Mail" data-en="Email">E-Mail</strong>
+        info@die-nordmaenner.de
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">📞</div>
+      <div>
+        <strong data-de="Telefon" data-en="Phone">Telefon</strong>
+        +49 (0) 123 456 789
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">📍</div>
+      <div>
+        <strong data-de="Standort" data-en="Location">Standort</strong>
+        Deutschland
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">🕐</div>
+      <div>
+        <strong data-de="Erreichbarkeit" data-en="Availability">Erreichbarkeit</strong>
+        <span data-de="Mo–Fr 07:00–19:00 Uhr" data-en="Mon–Fri 07:00–19:00">Mo–Fr 07:00–19:00 Uhr</span>
+      </div>
+    </div>
+  </div>
+
+  <form class="reveal" onsubmit="submitForm(event)">
+    <div class="form-row">
+      <input type="text" id="f-name" placeholder="Name" required />
+      <input type="email" id="f-email" placeholder="E-Mail" required />
+    </div>
+    <input type="tel" id="f-phone" placeholder="Telefon (optional)" />
+    <select id="f-service">
+      <option value="" disabled selected data-de="Leistung auswählen..." data-en="Select service...">Leistung auswählen...</option>
+      <option data-de="Kurier & Expresslieferung" data-en="Courier & Express Delivery">Kurier & Expresslieferung</option>
+      <option data-de="Stückgut & Pakete" data-en="Parcels & Pallets">Stückgut & Pakete</option>
+      <option data-de="Umzüge & Bürotransporte" data-en="Relocations & Office Moves">Umzüge & Bürotransporte</option>
+      <option data-de="Sperrgut & Sondertransporte" data-en="Oversized & Special Freight">Sperrgut & Sondertransporte</option>
+      <option data-de="Andere Anfrage" data-en="Other Request">Andere Anfrage</option>
+    </select>
+    <textarea id="f-msg" placeholder="Ihre Nachricht..." required></textarea>
+    <button type="submit" class="form-submit" data-de="Anfrage senden →" data-en="Send Request →">Anfrage senden →</button>
+    <p class="form-note" data-de="Wir melden uns innerhalb von 24 Stunden bei Ihnen." data-en="We will get back to you within 24 hours.">
+      Wir melden uns innerhalb von 24 Stunden bei Ihnen.
+    </p>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#hero" class="nav-logo" style="margin-bottom:8px;">
+        <img src="logo.svg" alt="Die Nordmänner Logo" style="height:55px;" />
+      </a>
+      <p data-de="Zuverlässiger Transport für Deutschland — persönlich, schnell und mit Herz." data-en="Reliable transport for Germany — personal, fast, and with heart.">
+        Zuverlässiger Transport für Deutschland — persönlich, schnell und mit Herz.
+      </p>
+    </div>
+    <div class="footer-links">
+      <h4 data-de="Navigation" data-en="Navigation">Navigation</h4>
+      <ul>
+        <li><a href="#services" data-de="Leistungen" data-en="Services">Leistungen</a></li>
+        <li><a href="#about" data-de="Über uns" data-en="About Us">Über uns</a></li>
+        <li><a href="#process" data-de="Ablauf" data-en="Process">Ablauf</a></li>
+        <li><a href="#contact" data-de="Kontakt" data-en="Contact">Kontakt</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4 data-de="Leistungen" data-en="Services">Leistungen</h4>
+      <ul>
+        <li><a href="#services" data-de="Kurier & Express" data-en="Courier & Express">Kurier & Express</a></li>
+        <li><a href="#services" data-de="Stückgut" data-en="Parcels">Stückgut</a></li>
+        <li><a href="#services" data-de="Umzüge" data-en="Relocations">Umzüge</a></li>
+        <li><a href="#services" data-de="Sondertransporte" data-en="Special Freight">Sondertransporte</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4 data-de="Rechtliches" data-en="Legal">Rechtliches</h4>
+      <ul>
+        <li><a href="#" data-de="Impressum" data-en="Imprint">Impressum</a></li>
+        <li><a href="#" data-de="Datenschutz" data-en="Privacy Policy">Datenschutz</a></li>
+        <li><a href="#" data-de="AGB" data-en="Terms & Conditions">AGB</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p data-de="© 2024 Die Nordmänner. Alle Rechte vorbehalten." data-en="© 2024 Die Nordmänner. All rights reserved.">
+      © 2024 Die Nordmänner. Alle Rechte vorbehalten.
+    </p>
+    <p data-de="Mit ♥ gemacht in Deutschland." data-en="Made with ♥ in Germany.">Mit ♥ gemacht in Deutschland.</p>
+  </div>
+</footer>
+
+<script>
+  // ── LANGUAGE ──
+  let currentLang = 'de';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.documentElement.lang = lang;
+
+    document.querySelectorAll('[data-de]').forEach(el => {
+      const text = el.getAttribute('data-' + lang);
+      if (!text) return;
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.placeholder = text;
+      } else if (el.tagName === 'OPTION') {
+        el.textContent = text;
+      } else {
+        el.innerHTML = text;
+      }
+    });
+  }
+
+  // ── HAMBURGER MENU ──
+  function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const btn = document.getElementById('hamburger');
+    menu.classList.toggle('open');
+    btn.classList.toggle('open');
+  }
+
+  // ── SCROLL REVEAL ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── FORM ──
+  function submitForm(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.form-submit');
+    const orig = btn.textContent;
+    btn.textContent = currentLang === 'de' ? '✓ Gesendet!' : '✓ Sent!';
+    btn.style.background = '#2ecc71';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+      e.target.reset();
+    }, 3000);
+  }
+
+  // ── SMOOTH NAV ──
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
