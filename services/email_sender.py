@@ -38,6 +38,8 @@ Ihr Team der Nordmänner"""
         part['Content-Disposition'] = f'attachment; filename="Angebot_{quote_id}.pdf"'
         msg.attach(part)
 
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as srv:
+    with smtplib.SMTP('smtp.gmail.com', 587, timeout=30) as srv:
+        srv.ehlo()
+        srv.starttls()
         srv.login(gmail_user, gmail_pass)
         srv.send_message(msg)
