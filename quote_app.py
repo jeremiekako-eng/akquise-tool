@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, send_from_directory, abort
-import os, json, uuid, traceback
+import os, json, uuid, traceback, threading
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -73,8 +73,17 @@ def api_submit():
         price     = calculate_price(data)
         quote_id  = str(uuid.uuid4())[:8].upper()
         pdf_path  = generate_pdf(data, price, quote_id, str(TEMP_DIR))
-        send_quote_email(data['email'], data['name'], pdf_path, quote_id)
-        _save_quote(quote_id, {**data, 'price': price, 'status': 'sent'})
+        _save_quote(quote_id, {**data, 'price': price, 'status': 'pending'})
+
+        def _send():
+            try:
+                send_quote_email(data['email'], data['name'], pdf_path, quote_id)
+                _save_quote(quote_id, {**data, 'price': price, 'status': 'sent'})
+                print(f"Email sent for {quote_id}")
+            except Exception as e:
+                print(f"Email failed for {quote_id}: {e}")
+
+        threading.Thread(target=_send, daemon=True).start()
         return jsonify({'success': True, 'quote_id': quote_id, 'price': price})
     except Exception as e:
         traceback.print_exc()
