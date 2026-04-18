@@ -462,6 +462,34 @@
       .form-row-3 { grid-template-columns: 1fr; }
     }
 
+    /* ── HERO PROMISE ── */
+    .hero-promise {
+      margin-top: 20px;
+      display: inline-block;
+      background: rgba(232,160,32,0.1);
+      border: 1px solid rgba(232,160,32,0.35);
+      border-radius: 50px;
+      padding: 10px 24px;
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+    .hero-promise strong { color: var(--gold); }
+
+    /* ── 2-MIN BANNER ── */
+    .promise-banner {
+      background: var(--gold);
+      color: var(--navy);
+      text-align: center;
+      padding: 18px 5%;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .promise-banner:hover { background: var(--gold2); }
+    .promise-banner span { opacity: 0.75; font-weight: 400; margin-left: 12px; font-size: 0.88rem; }
+
     /* ── QUOTE WIZARD ── */
     .q-progress {
       display: flex; align-items: center; justify-content: center;
@@ -641,6 +669,9 @@
       <button class="btn-primary" onclick="openQuoteModal()" data-de="Angebot anfragen" data-en="Request a Quote">Angebot anfragen</button>
       <a href="#services" class="btn-outline" data-de="Unsere Leistungen" data-en="Our Services">Unsere Leistungen</a>
     </div>
+    <div class="hero-promise">
+      ⏱️ <strong>Angebot in unter 2 Minuten</strong> — kostenlos & unverbindlich per E-Mail
+    </div>
     <div class="hero-stats">
       <div class="stat">
         <div class="stat-num">100%</div>
@@ -657,6 +688,12 @@
     </div>
   </div>
 </section>
+
+<!-- 2-MIN PROMISE BANNER -->
+<div class="promise-banner" onclick="openQuoteModal()">
+  ⏱️ Angebot in unter 2 Minuten — kostenlos & unverbindlich per E-Mail
+  <span>Jetzt anfragen →</span>
+</div>
 
 <!-- SERVICES -->
 <section id="services">
