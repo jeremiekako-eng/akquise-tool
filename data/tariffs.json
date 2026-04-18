@@ -1,0 +1,23 @@
+{
+  "base_price_per_km": 1.80,
+  "hourly_rate": 85.00,
+  "loading_hours": {
+    "transport": 1.5,
+    "umzug": 3.5,
+    "entruempelung": 2.5
+  },
+  "min_price": {
+    "transport": 150,
+    "umzug": 450,
+    "entruempelung": 250
+  },
+  "weight_surcharge": {
+    "1000": 0,
+    "2000": 80,
+    "3500": 160,
+    "7500": 320
+  },
+  "express_surcharge_percent": 30,
+  "weekend_surcharge_percent": 20,
+  "fuel_surcharge_percent": 8
+}

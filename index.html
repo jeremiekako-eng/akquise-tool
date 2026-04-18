@@ -411,6 +411,181 @@
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
     .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── QUOTE MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(8,15,24,0.88); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--dark); border: 1px solid rgba(232,160,32,0.2);
+      border-radius: 16px; width: 100%; max-width: 680px;
+      max-height: 90vh; overflow-y: auto; padding: 40px;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: var(--card); border: none; color: var(--gray);
+      width: 36px; height: 36px; border-radius: 50%; font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .modal-close:hover { color: var(--white); background: rgba(232,160,32,0.15); }
+
+    .modal h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 6px; }
+    .modal h2 span { color: var(--gold); }
+    .modal > p { color: var(--gray); font-size: 0.9rem; margin-bottom: 28px; }
+
+    .modal-section-label {
+      font-size: 0.72rem; font-weight: 700; color: var(--gold);
+      text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 12px; margin-top: 24px;
+    }
+
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    .form-submit:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+    .form-status {
+      padding: 12px 16px; border-radius: 10px; font-size: 0.88rem;
+      font-weight: 500; text-align: center; display: none;
+    }
+    .form-status.success { background: rgba(46,204,113,0.12); color: #2ecc71; border: 1px solid rgba(46,204,113,0.3); display: block; }
+    .form-status.error   { background: rgba(231,76,60,0.12);  color: #e74c3c;  border: 1px solid rgba(231,76,60,0.3);  display: block; }
+
+    @media (max-width: 600px) {
+      .modal { padding: 28px 20px; }
+      .form-row-3 { grid-template-columns: 1fr; }
+    }
+
+    /* ── QUOTE WIZARD ── */
+    .q-progress {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; margin-bottom: 28px;
+    }
+    .q-dot {
+      width: 30px; height: 30px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.15); background: var(--card);
+      color: var(--gray); font-size: 0.78rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.3s;
+    }
+    .q-dot.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+    .q-dot.done   { background: rgba(46,204,113,0.15); color: #2ecc71; border-color: #2ecc71; }
+    .q-line { flex: 1; height: 2px; background: rgba(255,255,255,0.1); transition: background 0.3s; max-width: 36px; }
+    .q-line.done { background: var(--gold); }
+
+    .q-step { display: none; }
+    .q-step.active { display: block; }
+    .q-step-title { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .q-step-sub   { font-size: 0.82rem; color: var(--gray); margin-bottom: 20px; }
+
+    .svc-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 4px 0 8px; }
+    .svc-card {
+      border: 2px solid rgba(255,255,255,0.08); border-radius: 12px;
+      padding: 18px 12px; cursor: pointer; text-align: center;
+      background: var(--card); transition: all 0.2s;
+    }
+    .svc-card:hover { border-color: rgba(232,160,32,0.4); transform: translateY(-2px); }
+    .svc-card.selected { border-color: var(--gold); background: rgba(232,160,32,0.08); }
+    .svc-icon { font-size: 1.8rem; margin-bottom: 8px; }
+    .svc-name { font-size: 0.82rem; font-weight: 700; color: var(--white); }
+    .svc-sub  { font-size: 0.72rem; color: var(--gray); margin-top: 3px; }
+
+    .route-result {
+      background: rgba(232,160,32,0.07); border: 1px solid rgba(232,160,32,0.25);
+      border-radius: 10px; padding: 12px 18px; display: none;
+      margin-top: 12px; gap: 28px; align-items: center; justify-content: center; flex-wrap: wrap;
+    }
+    .route-result.visible { display: flex; }
+    .rs-val   { font-size: 1.2rem; font-weight: 800; color: var(--gold); }
+    .rs-label { font-size: 0.72rem; color: var(--gray); text-align: center; }
+
+    .drop-zone {
+      border: 2px dashed rgba(232,160,32,0.3); border-radius: 12px;
+      padding: 32px 20px; text-align: center; cursor: pointer;
+      background: rgba(232,160,32,0.03); transition: all 0.2s; margin: 8px 0;
+    }
+    .drop-zone:hover, .drop-zone.drag-over { border-color: var(--gold); background: rgba(232,160,32,0.07); }
+    .dz-icon { font-size: 2.2rem; margin-bottom: 8px; }
+    .drop-zone p { color: var(--gray); font-size: 0.85rem; }
+    .drop-zone strong { color: var(--gold); }
+    .photo-previews { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .photo-thumb { width: 68px; height: 68px; border-radius: 8px; object-fit: cover; border: 2px solid rgba(232,160,32,0.3); }
+
+    .analysis-result {
+      border-radius: 10px; padding: 14px; margin-top: 10px;
+      font-size: 0.85rem; display: none;
+      background: rgba(46,204,113,0.07); border: 1px solid rgba(46,204,113,0.2);
+    }
+    .analysis-result.visible { display: block; }
+    .analysis-result h4 { color: #2ecc71; margin-bottom: 8px; font-size: 0.88rem; }
+    .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .analysis-stat strong { color: var(--gold); font-size: 1.1rem; }
+    .analysis-stat small  { color: var(--gray); font-size: 0.75rem; display: block; }
+
+    .q-nav { display: flex; gap: 10px; margin-top: 24px; }
+    .btn-qback {
+      flex: 1; background: transparent; color: var(--gray);
+      border: 1px solid rgba(255,255,255,0.15); padding: 12px;
+      border-radius: 10px; font-weight: 600; cursor: pointer;
+      font-family: inherit; font-size: 0.88rem; transition: all 0.2s;
+    }
+    .btn-qback:hover { border-color: var(--white); color: var(--white); }
+    .btn-qnext {
+      flex: 2; background: var(--gold); color: var(--navy); border: none;
+      padding: 12px 24px; border-radius: 10px; font-weight: 700;
+      cursor: pointer; font-family: inherit; font-size: 0.88rem; transition: all 0.2s;
+    }
+    .btn-qnext:hover { background: var(--gold2); }
+    .btn-qnext:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .q-loading { text-align: center; padding: 48px 0; display: none; }
+    .q-loading.visible { display: block; }
+    .spinner-ring {
+      width: 52px; height: 52px; border: 4px solid rgba(232,160,32,0.2);
+      border-top-color: var(--gold); border-radius: 50%;
+      animation: qspin 0.85s linear infinite; margin: 0 auto 18px;
+    }
+    @keyframes qspin { to { transform: rotate(360deg); } }
+
+    .q-success { text-align: center; padding: 8px 0; display: none; }
+    .q-success.visible { display: block; }
+    .success-check { font-size: 3.2rem; margin-bottom: 10px; }
+    .q-success h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 6px; }
+    .q-quote-id { color: var(--gold); font-size: 0.95rem; margin-bottom: 20px; }
+
+    .price-summary {
+      background: var(--card); border-radius: 12px; padding: 18px;
+      text-align: left; margin: 16px 0; border: 1px solid rgba(255,255,255,0.06);
+    }
+    .price-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 0.85rem; color: var(--gray); }
+    .price-row.total {
+      border-top: 1px solid rgba(232,160,32,0.3); margin-top: 8px;
+      padding-top: 10px; color: var(--white); font-weight: 700; font-size: 0.95rem;
+    }
+    .price-row.total span:last-child { color: var(--gold); font-size: 1.1rem; }
+
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; }
+    .toggle-label { font-size: 0.88rem; color: var(--white); font-weight: 500; }
+    .toggle-label small { display: block; color: var(--gray); font-size: 0.75rem; font-weight: 400; }
+    .toggle { position: relative; display: inline-block; width: 42px; height: 22px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: rgba(255,255,255,0.15); border-radius: 22px; transition: .3s; }
+    .toggle-slider::before { content:''; position:absolute; width:16px; height:16px; background:white; border-radius:50%; left:3px; bottom:3px; transition:.3s; }
+    .toggle input:checked + .toggle-slider { background: var(--gold); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+    .q-skip { background: none; border: none; color: var(--gray); font-size: 0.82rem; cursor: pointer; text-decoration: underline; margin-top: 8px; font-family: inherit; }
+    .q-skip:hover { color: var(--white); }
+
+    @media (max-width: 500px) {
+      .svc-cards { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -433,7 +608,7 @@
       <button id="btn-de" class="active" onclick="setLang('de')">DE</button>
       <button id="btn-en" onclick="setLang('en')">EN</button>
     </div>
-    <a href="#contact" class="nav-cta" data-de="Anfrage senden" data-en="Get a Quote">Anfrage senden</a>
+    <button class="nav-cta" onclick="openQuoteModal()" data-de="Angebot anfragen" data-en="Get a Quote">Angebot anfragen</button>
     <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menü">
       <span></span><span></span><span></span>
     </button>
@@ -446,7 +621,7 @@
   <a href="#about" onclick="toggleMenu()" data-de="Über uns" data-en="About">Über uns</a>
   <a href="#process" onclick="toggleMenu()" data-de="Ablauf" data-en="Process">Ablauf</a>
   <a href="#contact" onclick="toggleMenu()" data-de="Kontakt" data-en="Contact">Kontakt</a>
-  <a href="#contact" onclick="toggleMenu()" class="mobile-cta" data-de="Anfrage senden →" data-en="Get a Quote →">Anfrage senden →</a>
+  <a href="#" onclick="toggleMenu(); openQuoteModal(); return false;" class="mobile-cta" data-de="Angebot anfragen →" data-en="Get a Quote →">Angebot anfragen →</a>
 </div>
 
 <!-- HERO -->
@@ -463,7 +638,7 @@
       Die Nordmänner bringen Ihre Ware sicher ans Ziel — zuverlässig, pünktlich und mit dem Einsatz echter Profis.
     </p>
     <div class="hero-btns">
-      <a href="#contact" class="btn-primary" data-de="Jetzt anfragen" data-en="Request a Quote">Jetzt anfragen</a>
+      <button class="btn-primary" onclick="openQuoteModal()" data-de="Angebot anfragen" data-en="Request a Quote">Angebot anfragen</button>
       <a href="#services" class="btn-outline" data-de="Unsere Leistungen" data-en="Our Services">Unsere Leistungen</a>
     </div>
     <div class="hero-stats">
@@ -476,8 +651,8 @@
         <div class="stat-label" data-de="Bundesweit" data-en="Nationwide">Bundesweit</div>
       </div>
       <div class="stat">
-        <div class="stat-num">24h</div>
-        <div class="stat-label" data-de="Reaktionszeit" data-en="Response Time">Reaktionszeit</div>
+        <div class="stat-num">&lt;2 Min</div>
+        <div class="stat-label" data-de="Angebot per E-Mail" data-en="Quote by E-Mail">Angebot per E-Mail</div>
       </div>
     </div>
   </div>
@@ -637,8 +812,8 @@
     <div class="process-step">
       <div class="step-num">2</div>
       <h3 data-de="Angebot erhalten" data-en="Receive Quote">Angebot erhalten</h3>
-      <p data-de="Sie erhalten schnell ein klares, faires Angebot — ohne versteckte Kosten." data-en="You receive a quick, clear, and fair quote — no hidden costs.">
-        Sie erhalten schnell ein klares, faires Angebot — ohne versteckte Kosten.
+      <p data-de="In unter 2 Minuten liegt ein klares PDF-Angebot in Ihrem Postfach — ohne versteckte Kosten." data-en="In under 2 minutes you receive a clear PDF quote in your inbox — no hidden costs.">
+        In unter 2 Minuten liegt ein klares PDF-Angebot in Ihrem Postfach — ohne versteckte Kosten.
       </p>
     </div>
     <div class="process-step">
@@ -658,6 +833,176 @@
   </div>
 </section>
 
+<!-- QUOTE MODAL -->
+<div class="modal-overlay" id="quoteModal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeQuoteModal()" aria-label="Schließen">✕</button>
+    <h2>Angebot <span>anfragen</span></h2>
+    <p style="color:var(--gray);font-size:.88rem;margin-bottom:22px">KI-gestütztes Angebot — <strong style="color:var(--gold)">in unter 2 Minuten</strong> per E-Mail als PDF</p>
+
+    <!-- Progress -->
+    <div class="q-progress">
+      <div class="q-dot active" id="qdot-1">1</div>
+      <div class="q-line" id="qline-1"></div>
+      <div class="q-dot" id="qdot-2">2</div>
+      <div class="q-line" id="qline-2"></div>
+      <div class="q-dot" id="qdot-3">3</div>
+      <div class="q-line" id="qline-3"></div>
+      <div class="q-dot" id="qdot-4">4</div>
+      <div class="q-line" id="qline-4"></div>
+      <div class="q-dot" id="qdot-5">5</div>
+    </div>
+
+    <div id="q-form-wrapper">
+
+      <!-- STEP 1 — Service -->
+      <div class="q-step active" id="qstep-1">
+        <div class="q-step-title">Welche Leistung benötigen Sie?</div>
+        <div class="q-step-sub">Wählen Sie den Servicetyp aus</div>
+        <div class="svc-cards">
+          <div class="svc-card" onclick="selectService('transport',this)">
+            <div class="svc-icon">🚚</div>
+            <div class="svc-name">Transport</div>
+            <div class="svc-sub">Güter & Lieferung</div>
+          </div>
+          <div class="svc-card" onclick="selectService('umzug',this)">
+            <div class="svc-icon">🏠</div>
+            <div class="svc-name">Umzug</div>
+            <div class="svc-sub">Privat & Büro</div>
+          </div>
+          <div class="svc-card" onclick="selectService('entruempelung',this)">
+            <div class="svc-icon">🗑️</div>
+            <div class="svc-name">Entrümpelung</div>
+            <div class="svc-sub">Keller, Dachboden, Wohnung</div>
+          </div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-qnext" onclick="nextStep()">Weiter →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2 — Route -->
+      <div class="q-step" id="qstep-2">
+        <div class="q-step-title">Von wo nach wo?</div>
+        <div class="q-step-sub">Bitte vollständige Adressen eingeben</div>
+        <input type="text" id="q-origin" placeholder="Abholadresse (Straße, PLZ, Stadt)" style="margin-bottom:10px" />
+        <input type="text" id="q-destination" placeholder="Lieferadresse (Straße, PLZ, Stadt)" />
+        <div class="route-result" id="q-route-result">
+          <div>
+            <div class="rs-val" id="q-dist-val">–</div>
+            <div class="rs-label">Distanz</div>
+          </div>
+          <div>
+            <div class="rs-val" id="q-time-val">–</div>
+            <div class="rs-label">Fahrtzeit</div>
+          </div>
+        </div>
+        <div class="q-nav">
+          <button class="btn-qback" onclick="prevStep()">← Zurück</button>
+          <button class="btn-qnext" onclick="nextStep()">Weiter →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 — Details -->
+      <div class="q-step" id="qstep-3">
+        <div class="q-step-title">Transportdetails</div>
+        <div class="q-step-sub">Datum, Gewicht und Optionen</div>
+        <div class="form-row" style="margin-bottom:12px">
+          <div>
+            <label style="font-size:.78rem;color:var(--gray);display:block;margin-bottom:4px">Wunschdatum</label>
+            <input type="date" id="q-date" />
+          </div>
+          <div>
+            <label style="font-size:.78rem;color:var(--gray);display:block;margin-bottom:4px">Zeitfenster</label>
+            <select id="q-time-window">
+              <option value="Flexibel">Flexibel</option>
+              <option value="Früh (07–12 Uhr)">Früh (07–12 Uhr)</option>
+              <option value="Mittag (12–16 Uhr)">Mittag (12–16 Uhr)</option>
+              <option value="Nachmittag (16–19 Uhr)">Nachmittag (16–19 Uhr)</option>
+              <option value="Ganztag">Ganztag</option>
+            </select>
+          </div>
+        </div>
+        <label style="font-size:.78rem;color:var(--gray);display:block;margin-bottom:4px">Geschätztes Gewicht (kg)</label>
+        <input type="number" id="q-weight" placeholder="z.B. 500" min="1" style="margin-bottom:12px" />
+        <div class="toggle-row">
+          <div class="toggle-label">
+            ⚡ Express
+            <small>+30% — Priorität &amp; schnellstmögliche Abwicklung</small>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="q-express">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <textarea id="q-notes" placeholder="Besondere Hinweise (Etage, Aufzug, Sperrgut...)" style="min-height:80px;margin-top:10px"></textarea>
+        <div class="q-nav">
+          <button class="btn-qback" onclick="prevStep()">← Zurück</button>
+          <button class="btn-qnext" onclick="nextStep()">Weiter →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 — Photos -->
+      <div class="q-step" id="qstep-4">
+        <div class="q-step-title">Fotos hochladen</div>
+        <div class="q-step-sub">KI analysiert Volumen &amp; Gewicht automatisch (optional)</div>
+        <div class="drop-zone" id="q-drop-zone">
+          <div class="dz-icon">📷</div>
+          <p><strong>Fotos hier ablegen</strong> oder klicken zum Auswählen</p>
+          <p style="margin-top:4px;font-size:.75rem">Max. 5 Bilder · JPG, PNG</p>
+        </div>
+        <input type="file" id="q-photo-input" accept="image/*" multiple style="display:none" />
+        <div class="photo-previews" id="q-photo-previews"></div>
+        <div class="analysis-result" id="q-analysis-result"></div>
+        <div class="q-nav">
+          <button class="btn-qback" onclick="prevStep()">← Zurück</button>
+          <button class="btn-qnext" onclick="nextStep()">Weiter →</button>
+        </div>
+        <div style="text-align:center">
+          <button class="q-skip" onclick="nextStep()">Ohne Fotos fortfahren →</button>
+        </div>
+      </div>
+
+      <!-- STEP 5 — Contact -->
+      <div class="q-step" id="qstep-5">
+        <div class="q-step-title">Ihre Kontaktdaten</div>
+        <div class="q-step-sub">Wohin soll das Angebot gesendet werden?</div>
+        <input type="text" id="q-name" placeholder="Vor- und Nachname" required style="margin-bottom:10px" />
+        <input type="email" id="q-email" placeholder="E-Mail-Adresse" required style="margin-bottom:10px" />
+        <input type="tel" id="q-phone" placeholder="Telefonnummer (optional)" />
+        <div class="q-nav">
+          <button class="btn-qback" onclick="prevStep()">← Zurück</button>
+          <button class="btn-qnext" onclick="submitQuoteWizard()">📄 Angebot erstellen →</button>
+        </div>
+      </div>
+
+    </div><!-- /q-form-wrapper -->
+
+    <!-- Loading -->
+    <div class="q-loading" id="q-loading">
+      <div class="spinner-ring"></div>
+      <p style="color:var(--white);font-weight:600;margin-bottom:6px">Angebot wird erstellt…</p>
+      <p style="color:var(--gray);font-size:.82rem">KI berechnet Preis · PDF wird generiert · E-Mail wird versendet<br><span style="color:var(--gold);font-size:.78rem">⏱️ Ihr Angebot ist in unter 2 Minuten in Ihrem Postfach</span></p>
+    </div>
+
+    <!-- Success -->
+    <div class="q-success" id="q-success">
+      <div class="success-check">✅</div>
+      <h3>Angebot erfolgreich versendet!</h3>
+      <p class="q-quote-id" id="q-quote-id"></p>
+      <p style="color:var(--gray);font-size:.85rem;margin-bottom:4px">Das PDF-Angebot liegt in Ihrem Postfach.</p>
+      <p style="color:var(--gray);font-size:.85rem">Mit dem Buchungslink im PDF können Sie direkt buchen.</p>
+      <div class="price-summary">
+        <p style="font-size:.75rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Preisübersicht</p>
+        <div id="q-price-breakdown"></div>
+        <p style="font-size:.78rem;color:var(--gray);margin-top:10px">🚚 Fahrzeug: <strong style="color:var(--white)" id="q-vehicle-info"></strong></p>
+      </div>
+      <button class="btn-qnext" onclick="closeQuoteModal()" style="width:100%;margin-top:4px">Schließen</button>
+    </div>
+
+  </div>
+</div>
+
 <!-- CONTACT -->
 <section id="contact">
   <div class="contact-info reveal">
@@ -671,7 +1016,7 @@
       <div class="contact-icon">📧</div>
       <div>
         <strong data-de="E-Mail" data-en="Email">E-Mail</strong>
-        info@die-nordmaenner.de
+        info@dienordmaenner.com
       </div>
     </div>
     <div class="contact-item">
@@ -768,70 +1113,281 @@
 <script>
   // ── LANGUAGE ──
   let currentLang = 'de';
-
   function setLang(lang) {
     currentLang = lang;
     document.getElementById('btn-de').classList.toggle('active', lang === 'de');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
     document.documentElement.lang = lang;
-
     document.querySelectorAll('[data-de]').forEach(el => {
       const text = el.getAttribute('data-' + lang);
       if (!text) return;
-      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-        el.placeholder = text;
-      } else if (el.tagName === 'OPTION') {
-        el.textContent = text;
-      } else {
-        el.innerHTML = text;
-      }
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = text;
+      else if (el.tagName === 'OPTION') el.textContent = text;
+      else el.innerHTML = text;
     });
   }
 
-  // ── HAMBURGER MENU ──
+  // ── HAMBURGER ──
   function toggleMenu() {
-    const menu = document.getElementById('mobileMenu');
-    const btn = document.getElementById('hamburger');
-    menu.classList.toggle('open');
-    btn.classList.toggle('open');
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.getElementById('hamburger').classList.toggle('open');
   }
 
   // ── SCROLL REVEAL ──
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
-    });
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
   }, { threshold: 0.12 });
-
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // ── FORM ──
+  // ── CONTACT FORM (simple) ──
   function submitForm(e) {
     e.preventDefault();
     const btn = e.target.querySelector('.form-submit');
     const orig = btn.textContent;
-    btn.textContent = currentLang === 'de' ? '✓ Gesendet!' : '✓ Sent!';
-    btn.style.background = '#2ecc71';
-    setTimeout(() => {
-      btn.textContent = orig;
-      btn.style.background = '';
-      e.target.reset();
-    }, 3000);
+    btn.textContent = '✓ Gesendet!'; btn.style.background = '#2ecc71';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; e.target.reset(); }, 3000);
   }
 
   // ── SMOOTH NAV ──
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     });
   });
+
+  // ══════════════════════════════════════════════════════════
+  // QUOTE WIZARD
+  // ══════════════════════════════════════════════════════════
+  let qStep = 1;
+  let qData = {};
+  let qPhotos = [];
+
+  function openQuoteModal() {
+    resetWizard();
+    document.getElementById('quoteModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeQuoteModal() {
+    document.getElementById('quoteModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('quoteModal')) closeQuoteModal();
+  }
+
+  function resetWizard() {
+    qStep = 1; qData = {}; qPhotos = [];
+    document.getElementById('q-form-wrapper').style.display = '';
+    document.getElementById('q-loading').classList.remove('visible');
+    document.getElementById('q-success').classList.remove('visible');
+    document.querySelectorAll('.q-step').forEach(s => s.classList.remove('active'));
+    document.getElementById('qstep-1').classList.add('active');
+    document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('q-route-result').classList.remove('visible');
+    document.getElementById('q-analysis-result').classList.remove('visible');
+    document.getElementById('q-photo-previews').innerHTML = '';
+    updateProgress();
+  }
+
+  function updateProgress() {
+    for (let i = 1; i <= 5; i++) {
+      const dot  = document.getElementById(`qdot-${i}`);
+      const line = document.getElementById(`qline-${i}`);
+      dot.classList.remove('active','done');
+      if (i < qStep) { dot.classList.add('done'); dot.textContent = '✓'; }
+      else { dot.classList.toggle('active', i === qStep); dot.textContent = i; }
+      if (line) line.classList.toggle('done', i < qStep);
+    }
+  }
+
+  function selectService(type, card) {
+    qData.service_type = type;
+    document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+  }
+
+  function validateStep(step) {
+    if (step === 1 && !qData.service_type) { alert('Bitte wählen Sie eine Leistung aus.'); return false; }
+    if (step === 2) {
+      const o = document.getElementById('q-origin').value.trim();
+      const d = document.getElementById('q-destination').value.trim();
+      if (!o || !d) { alert('Bitte beide Adressen eingeben.'); return false; }
+    }
+    if (step === 5) {
+      const n = document.getElementById('q-name').value.trim();
+      const m = document.getElementById('q-email').value.trim();
+      if (!n || !m) { alert('Bitte Name und E-Mail ausfüllen.'); return false; }
+    }
+    return true;
+  }
+
+  function collectStep(step) {
+    if (step === 2) {
+      qData.origin      = document.getElementById('q-origin').value.trim();
+      qData.destination = document.getElementById('q-destination').value.trim();
+    }
+    if (step === 3) {
+      qData.date        = document.getElementById('q-date').value;
+      qData.time_window = document.getElementById('q-time-window').value;
+      qData.weight_kg   = parseFloat(document.getElementById('q-weight').value) || 500;
+      qData.is_express  = document.getElementById('q-express').checked;
+      qData.notes       = document.getElementById('q-notes').value.trim();
+    }
+    if (step === 5) {
+      qData.name  = document.getElementById('q-name').value.trim();
+      qData.email = document.getElementById('q-email').value.trim();
+      qData.phone = document.getElementById('q-phone').value.trim();
+    }
+  }
+
+  function nextStep() {
+    if (!validateStep(qStep)) return;
+    collectStep(qStep);
+    // skip photo step for pure transport
+    if (qStep === 3 && qData.service_type === 'transport') qStep = 5;
+    else qStep = Math.min(qStep + 1, 5);
+    showStep(qStep);
+  }
+
+  function prevStep() {
+    if (qStep === 5 && qData.service_type === 'transport') qStep = 3;
+    else qStep = Math.max(qStep - 1, 1);
+    showStep(qStep);
+  }
+
+  function showStep(n) {
+    document.querySelectorAll('.q-step').forEach(s => s.classList.remove('active'));
+    document.getElementById(`qstep-${n}`).classList.add('active');
+    updateProgress();
+  }
+
+  // ── Distance fetch ────────────────────────────────────────
+  async function fetchDistance() {
+    const o = document.getElementById('q-origin').value.trim();
+    const d = document.getElementById('q-destination').value.trim();
+    if (!o || !d) return;
+    try {
+      const res  = await fetch('/api/distance', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({origin:o,destination:d}) });
+      const data = await res.json();
+      if (data.error) return;
+      qData.distance_km      = data.distance_km;
+      qData.duration_minutes = data.duration_minutes;
+      document.getElementById('q-dist-val').textContent = data.distance_text;
+      document.getElementById('q-time-val').textContent = data.duration_text;
+      document.getElementById('q-route-result').classList.add('visible');
+    } catch(e) { /* silent */ }
+  }
+
+  // ── Photo upload ──────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    const zone  = document.getElementById('q-drop-zone');
+    const input = document.getElementById('q-photo-input');
+    const dest  = document.getElementById('q-destination');
+    const orig  = document.getElementById('q-origin');
+
+    zone.addEventListener('click', () => input.click());
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('drag-over'); handlePhotos(e.dataTransfer.files); });
+    input.addEventListener('change', e => handlePhotos(e.target.files));
+
+    dest.addEventListener('blur', fetchDistance);
+    orig.addEventListener('blur', () => { if (dest.value.trim()) fetchDistance(); });
+  });
+
+  function handlePhotos(files) {
+    qPhotos = Array.from(files).slice(0, 5);
+    const prev = document.getElementById('q-photo-previews');
+    prev.innerHTML = '';
+    qPhotos.forEach(f => {
+      const img = document.createElement('img');
+      img.className = 'photo-thumb';
+      img.src = URL.createObjectURL(f);
+      prev.appendChild(img);
+    });
+    if (qPhotos.length) analyzePhotos();
+  }
+
+  async function analyzePhotos() {
+    const box = document.getElementById('q-analysis-result');
+    box.innerHTML = '<p style="color:var(--gray)">🔍 KI analysiert Ihre Fotos…</p>';
+    box.classList.add('visible');
+    const fd = new FormData();
+    qPhotos.forEach(f => fd.append('photos', f));
+    fd.append('service_type', qData.service_type || 'umzug');
+    try {
+      const res  = await fetch('/api/analyze-photos', { method:'POST', body: fd });
+      const data = await res.json();
+      if (!data.error) {
+        qData.volume_m3 = data.volume_m3;
+        if (!document.getElementById('q-weight').value) qData.weight_kg = data.weight_kg;
+        box.innerHTML = `
+          <h4>✅ KI-Analyse abgeschlossen</h4>
+          <div class="analysis-grid">
+            <div class="analysis-stat"><strong>${data.volume_m3} m³</strong><small>Geschätztes Volumen</small></div>
+            <div class="analysis-stat"><strong>${data.weight_kg} kg</strong><small>Geschätztes Gewicht</small></div>
+          </div>
+          ${data.vehicle_recommendation ? `<p style="margin-top:8px;color:var(--gray);font-size:.78rem">🚚 Empfehlung: <strong style="color:var(--white)">${data.vehicle_recommendation}</strong></p>` : ''}
+          ${data.notes ? `<p style="margin-top:4px;color:var(--gray);font-size:.78rem">${data.notes}</p>` : ''}`;
+      } else {
+        box.innerHTML = '<p style="color:var(--gray)">Analyse nicht möglich — Sie können trotzdem fortfahren.</p>';
+      }
+    } catch(e) {
+      box.innerHTML = '<p style="color:var(--gray)">Verbindungsfehler — fortfahren ohne Analyse.</p>';
+    }
+  }
+
+  // ── Submit ────────────────────────────────────────────────
+  async function submitQuoteWizard() {
+    if (!validateStep(5)) return;
+    collectStep(5);
+
+    document.getElementById('q-form-wrapper').style.display = 'none';
+    document.getElementById('q-loading').classList.add('visible');
+
+    try {
+      const res  = await fetch('/api/submit-quote', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(qData)
+      });
+      const data = await res.json();
+      document.getElementById('q-loading').classList.remove('visible');
+
+      if (data.success) {
+        showSuccess(data);
+      } else {
+        document.getElementById('q-form-wrapper').style.display = '';
+        alert('Fehler: ' + (data.error || 'Unbekannter Fehler. Bitte erneut versuchen.'));
+      }
+    } catch(e) {
+      document.getElementById('q-loading').classList.remove('visible');
+      document.getElementById('q-form-wrapper').style.display = '';
+      alert('Verbindungsfehler. Ist der Server aktiv?');
+    }
+  }
+
+  function showSuccess(data) {
+    const p = data.price;
+    document.getElementById('q-quote-id').textContent = `Angebot #${data.quote_id} wurde an ${qData.email} versendet`;
+    document.getElementById('q-vehicle-info').textContent = p.vehicle;
+
+    let html = '';
+    html += row('Fahrtkosten', p.distance_cost);
+    html += row('Arbeitszeit', p.time_cost);
+    if (p.weight_extra > 0) html += row('Gewichtszuschlag', p.weight_extra);
+    for (const [k,v] of Object.entries(p.surcharges || {})) html += row(k, v);
+    html += row('Netto', p.net);
+    html += row('MwSt. 19%', p.vat);
+    html += `<div class="price-row total"><span>Gesamtbetrag</span><span>€ ${p.gross.toFixed(2)}</span></div>`;
+    document.getElementById('q-price-breakdown').innerHTML = html;
+    document.getElementById('q-success').classList.add('visible');
+  }
+
+  function row(label, amt) {
+    return `<div class="price-row"><span>${label}</span><span>€ ${amt.toFixed(2)}</span></div>`;
+  }
 </script>
 
 </body>

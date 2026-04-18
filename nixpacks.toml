@@ -2,4 +2,4 @@
 nixPkgs = ["python311"]
 
 [start]
-cmd = "gunicorn app:app"
+cmd = "gunicorn quote_app:app"
