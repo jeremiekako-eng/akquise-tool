@@ -988,16 +988,11 @@
     <!-- Success -->
     <div class="q-success" id="q-success">
       <div class="success-check">✅</div>
-      <h3>Angebot erfolgreich versendet!</h3>
+      <h3>Angebot wird versendet!</h3>
       <p class="q-quote-id" id="q-quote-id"></p>
-      <p style="color:var(--gray);font-size:.85rem;margin-bottom:4px">Das PDF-Angebot liegt in Ihrem Postfach.</p>
+      <p style="color:var(--gray);font-size:.88rem;margin:12px 0 4px">Ihr persönliches PDF-Angebot ist in wenigen Minuten in Ihrem Postfach.</p>
       <p style="color:var(--gray);font-size:.85rem">Mit dem Buchungslink im PDF können Sie direkt buchen.</p>
-      <div class="price-summary">
-        <p style="font-size:.75rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Preisübersicht</p>
-        <div id="q-price-breakdown"></div>
-        <p style="font-size:.78rem;color:var(--gray);margin-top:10px">🚚 Fahrzeug: <strong style="color:var(--white)" id="q-vehicle-info"></strong></p>
-      </div>
-      <button class="btn-qnext" onclick="closeQuoteModal()" style="width:100%;margin-top:4px">Schließen</button>
+      <button class="btn-qnext" onclick="closeQuoteModal()" style="width:100%;margin-top:24px">Schließen</button>
     </div>
 
   </div>
@@ -1369,24 +1364,8 @@
   }
 
   function showSuccess(data) {
-    const p = data.price;
-    document.getElementById('q-quote-id').textContent = `Angebot #${data.quote_id} wurde an ${qData.email} versendet`;
-    document.getElementById('q-vehicle-info').textContent = p.vehicle;
-
-    let html = '';
-    html += row('Fahrtkosten', p.distance_cost);
-    html += row('Arbeitszeit', p.time_cost);
-    if (p.weight_extra > 0) html += row('Gewichtszuschlag', p.weight_extra);
-    for (const [k,v] of Object.entries(p.surcharges || {})) html += row(k, v);
-    html += row('Netto', p.net);
-    html += row('MwSt. 19%', p.vat);
-    html += `<div class="price-row total"><span>Gesamtbetrag</span><span>€ ${p.gross.toFixed(2)}</span></div>`;
-    document.getElementById('q-price-breakdown').innerHTML = html;
+    document.getElementById('q-quote-id').textContent = `Angebot #${data.quote_id} wurde an ${qData.email} gesendet`;
     document.getElementById('q-success').classList.add('visible');
-  }
-
-  function row(label, amt) {
-    return `<div class="price-row"><span>${label}</span><span>€ ${amt.toFixed(2)}</span></div>`;
   }
 </script>
 
