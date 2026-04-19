@@ -614,6 +614,38 @@
     @media (max-width: 500px) {
       .svc-cards { grid-template-columns: 1fr; }
     }
+
+    /* ── ADDRESS AUTOCOMPLETE ── */
+    .addr-wrap { position: relative; margin-bottom: 10px; }
+    .addr-wrap input { margin-bottom: 0; }
+    .addr-dropdown {
+      position: fixed; z-index: 9999;
+      background: #1e2f42; border: 1px solid rgba(232,160,32,0.3);
+      border-radius: 0 0 10px 10px;
+      max-height: 220px; overflow-y: auto; display: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .addr-dropdown.open { display: block; }
+    .addr-option {
+      padding: 10px 14px; font-size: 0.84rem; color: var(--white);
+      cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.15s;
+    }
+    .addr-option:last-child { border-bottom: none; }
+    .addr-option:hover, .addr-option.focused { background: rgba(232,160,32,0.12); }
+    .addr-option small { display: block; color: var(--gray); font-size: 0.75rem; margin-top: 2px; }
+
+    /* ── PREIS-ANZEIGE NACH ABSCHLUSS ── */
+    .price-reveal {
+      background: var(--card); border-radius: 12px; padding: 16px 18px;
+      margin: 14px 0; border: 1px solid rgba(232,160,32,0.2); text-align: left;
+    }
+    .price-reveal-row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 0.83rem; color: var(--gray); }
+    .price-reveal-row.total {
+      border-top: 1px solid rgba(232,160,32,0.3); margin-top: 8px;
+      padding-top: 10px; color: var(--white); font-weight: 700; font-size: 1rem;
+    }
+    .price-reveal-row.total span:last-child { color: var(--gold); font-size: 1.15rem; }
   </style>
 </head>
 <body>
@@ -922,8 +954,14 @@
       <div class="q-step" id="qstep-2">
         <div class="q-step-title">Von wo nach wo?</div>
         <div class="q-step-sub">Bitte vollständige Adressen eingeben</div>
-        <input type="text" id="q-origin" placeholder="Abholadresse (Straße, PLZ, Stadt)" style="margin-bottom:10px" />
-        <input type="text" id="q-destination" placeholder="Lieferadresse (Straße, PLZ, Stadt)" />
+        <div class="addr-wrap">
+          <input type="text" id="q-origin" placeholder="Abholadresse (Straße, PLZ, Stadt)" autocomplete="off" />
+          <div class="addr-dropdown" id="drop-origin"></div>
+        </div>
+        <div class="addr-wrap">
+          <input type="text" id="q-destination" placeholder="Lieferadresse (Straße, PLZ, Stadt)" autocomplete="off" />
+          <div class="addr-dropdown" id="drop-destination"></div>
+        </div>
         <div class="route-result" id="q-route-result">
           <div>
             <div class="rs-val" id="q-dist-val">–</div>
@@ -1025,11 +1063,12 @@
     <!-- Success -->
     <div class="q-success" id="q-success">
       <div class="success-check">✅</div>
-      <h3>Angebot wird versendet!</h3>
+      <h3>Ihr Angebot steht fest!</h3>
       <p class="q-quote-id" id="q-quote-id"></p>
-      <p style="color:var(--gray);font-size:.88rem;margin:12px 0 4px">Ihr persönliches PDF-Angebot ist in wenigen Minuten in Ihrem Postfach.</p>
-      <p style="color:var(--gray);font-size:.85rem">Mit dem Buchungslink im PDF können Sie direkt buchen.</p>
-      <button class="btn-qnext" onclick="closeQuoteModal()" style="width:100%;margin-top:24px">Schließen</button>
+      <div class="price-reveal" id="q-price-reveal"></div>
+      <p style="color:var(--gray);font-size:.84rem;margin:10px 0 4px">Das vollständige PDF-Angebot ist in wenigen Minuten in Ihrem Postfach.</p>
+      <p style="color:var(--gray);font-size:.82rem">Mit dem Buchungslink im PDF können Sie direkt buchen.</p>
+      <button class="btn-qnext" onclick="closeQuoteModal()" style="width:100%;margin-top:20px">Schließen</button>
     </div>
 
   </div>
@@ -1401,9 +1440,97 @@
   }
 
   function showSuccess(data) {
-    document.getElementById('q-quote-id').textContent = `Angebot #${data.quote_id} wurde an ${qData.email} gesendet`;
+    document.getElementById('q-quote-id').textContent = `Angebot #${data.quote_id} · ${qData.email}`;
+    const p = data.price || {};
+    const rows = [];
+    if (p.distance_cost) rows.push(['Streckenkosten', `${p.distance_cost.toFixed(2)} €`]);
+    if (p.time_cost)     rows.push(['Zeitaufwand',    `${p.time_cost.toFixed(2)} €`]);
+    if (p.weight_extra)  rows.push(['Gewichtszuschlag', `${p.weight_extra.toFixed(2)} €`]);
+    if (p.surcharges) {
+      for (const [k,v] of Object.entries(p.surcharges)) {
+        if (v) rows.push([k, `${v.toFixed(2)} €`]);
+      }
+    }
+    const surchHtml = rows.map(([l,v]) =>
+      `<div class="price-reveal-row"><span>${l}</span><span>${v}</span></div>`).join('');
+    document.getElementById('q-price-reveal').innerHTML = `
+      ${surchHtml}
+      <div class="price-reveal-row"><span>Netto</span><span>${(p.net||0).toFixed(2)} €</span></div>
+      <div class="price-reveal-row"><span>MwSt. 19 %</span><span>${(p.vat||0).toFixed(2)} €</span></div>
+      <div class="price-reveal-row total"><span>Gesamtpreis</span><span>${(p.gross||0).toFixed(2)} €</span></div>
+    `;
     document.getElementById('q-success').classList.add('visible');
   }
+
+  // ── ADDRESS AUTOCOMPLETE ──────────────────────────────────
+  let _acTimers = {};
+
+  function positionDrop(input, drop) {
+    const r = input.getBoundingClientRect();
+    drop.style.left  = r.left + 'px';
+    drop.style.top   = (r.bottom) + 'px';
+    drop.style.width = r.width + 'px';
+  }
+
+  function setupAutocomplete(inputId, dropId) {
+    const input = document.getElementById(inputId);
+    const drop  = document.getElementById(dropId);
+    let focusedIdx = -1;
+
+    function close() { drop.classList.remove('open'); focusedIdx = -1; }
+
+    input.addEventListener('input', () => {
+      clearTimeout(_acTimers[inputId]);
+      const q = input.value.trim();
+      if (q.length < 3) { close(); return; }
+      _acTimers[inputId] = setTimeout(() => fetchSuggestions(q, drop, input, close), 300);
+    });
+
+    input.addEventListener('keydown', e => {
+      const items = drop.querySelectorAll('.addr-option');
+      if (!items.length) return;
+      if (e.key === 'ArrowDown') { e.preventDefault(); focusedIdx = Math.min(focusedIdx+1, items.length-1); highlight(items, focusedIdx); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); focusedIdx = Math.max(focusedIdx-1, 0); highlight(items, focusedIdx); }
+      else if (e.key === 'Enter' && focusedIdx >= 0) { e.preventDefault(); items[focusedIdx].click(); }
+      else if (e.key === 'Escape') close();
+    });
+
+    input.addEventListener('blur', () => setTimeout(close, 200));
+    window.addEventListener('scroll', () => { if (drop.classList.contains('open')) positionDrop(input, drop); }, true);
+  }
+
+  function highlight(items, idx) {
+    items.forEach((el, i) => el.classList.toggle('focused', i === idx));
+  }
+
+  async function fetchSuggestions(q, drop, input, close) {
+    try {
+      const res  = await fetch(`/api/autocomplete?q=${encodeURIComponent(q)}`);
+      const list = await res.json();
+      drop.innerHTML = '';
+      if (!list.length) { close(); return; }
+      list.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'addr-option';
+        div.innerHTML = `${item.label}<small>${item.sub}</small>`;
+        div.addEventListener('mousedown', e => {
+          e.preventDefault();
+          input.value = item.full;
+          close();
+          const other = document.getElementById(input.id === 'q-origin' ? 'q-destination' : 'q-origin');
+          if (other && other.value.trim()) fetchDistance();
+        });
+        drop.appendChild(div);
+      });
+      positionDrop(input, drop);
+      drop.classList.add('open');
+    } catch(e) { console.error('Autocomplete error:', e); }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setupAutocomplete('q-origin', 'drop-origin');
+    setupAutocomplete('q-destination', 'drop-destination');
+  });
 </script>
 
 </body>

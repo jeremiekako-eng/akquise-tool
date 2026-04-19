@@ -40,6 +40,32 @@ def static_files(filename):
 
 # ── API ───────────────────────────────────────────────────────────────────────
 
+@app.route('/api/autocomplete', methods=['GET'])
+def api_autocomplete():
+    import requests as req
+    q       = request.args.get('q', '').strip()
+    api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
+    if not q or len(q) < 3:
+        return jsonify([])
+    if not api_key:
+        return jsonify([])
+    r = req.get(
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+        params={'input': q, 'types': 'address', 'language': 'de',
+                'components': 'country:de', 'key': api_key},
+        timeout=5
+    )
+    data = r.json()
+    results = []
+    for p in data.get('predictions', [])[:6]:
+        results.append({
+            'label': p['structured_formatting']['main_text'],
+            'sub':   p['structured_formatting'].get('secondary_text', ''),
+            'full':  p['description']
+        })
+    return jsonify(results)
+
+
 @app.route('/api/distance', methods=['POST'])
 def api_distance():
     from services.maps import get_distance
