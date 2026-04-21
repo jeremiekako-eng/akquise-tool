@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wettbewerberanalyse — Die Nordmänner Entrümpelung & Umzüge Kiel</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #f6f4f0; --ink: #1a1a18; --muted: #6b6860;
+    --accent: #c45d3e; --accent-light: #f0e8e4;
+    --border: #ddd9d0; --white: #ffffff;
+    --green: #3d7a5c; --green-light: #e8f2ec;
+    --blue: #2a6496; --blue-light: #e8f0f7;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.65; }
+  @media print {
+    body { background: white; font-size: 13px; }
+    .no-print { display: none; }
+    .page-break { page-break-before: always; }
+    section { page-break-inside: avoid; }
+  }
+  .wrapper { max-width: 920px; margin: 0 auto; padding: 48px 32px; }
+
+  /* Cover */
+  .cover { background: var(--ink); color: white; padding: 72px 64px; margin-bottom: 48px; position: relative; overflow: hidden; border-radius: 4px; }
+  .cover::before { content: ''; position: absolute; top: -60px; right: -60px; width: 280px; height: 280px; border-radius: 50%; background: rgba(196,93,62,0.15); }
+  .cover::after { content: ''; position: absolute; bottom: -40px; left: 20%; width: 200px; height: 200px; border-radius: 50%; background: rgba(196,93,62,0.07); }
+  .cover-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 24px; }
+  .cover h1 { font-family: 'Instrument Serif', serif; font-size: 40px; line-height: 1.15; margin-bottom: 16px; }
+  .cover-meta { color: rgba(255,255,255,0.5); font-size: 13px; }
+  .cover-meta span { margin-right: 24px; }
+  .cover-badge { display: inline-block; background: var(--accent); color: white; font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-top: 20px; }
+
+  section { margin-bottom: 56px; }
+  h2 { font-family: 'Instrument Serif', serif; font-size: 28px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+
+  /* Market Divider */
+  .market-label {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    font-weight: 600; color: var(--muted); margin-bottom: 20px; margin-top: 32px;
+  }
+  .market-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .market-label span { background: var(--ink); color: white; padding: 4px 12px; border-radius: 20px; font-size: 10px; }
+
+  /* Executive Summary */
+  .exec-summary { background: var(--white); border-left: 4px solid var(--accent); padding: 28px 32px; border-radius: 0 8px 8px 0; font-size: 16px; line-height: 1.8; }
+
+  /* Highlight Box */
+  .highlight-box { background: var(--ink); color: white; padding: 32px 36px; border-radius: 10px; margin: 24px 0; }
+  .highlight-box .hl-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .highlight-box p { color: rgba(255,255,255,0.8); line-height: 1.8; }
+  .highlight-box strong { color: white; }
+
+  /* Competitor Grid */
+  .competitor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 640px) { .competitor-grid { grid-template-columns: 1fr; } }
+  .competitor-card { background: var(--white); border-radius: 10px; padding: 26px; border: 1px solid var(--border); position: relative; }
+  .competitor-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent); border-radius: 10px 0 0 10px; }
+  .competitor-card.secondary::before { background: #9ca3af; }
+  .score-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; }
+  .score-badge.top { background: var(--accent); color: white; }
+  .score-badge.mid { background: #e5e7eb; color: #374151; }
+  .score-badge.low { background: #f3f4f6; color: #9ca3af; }
+  .url { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .headline-quote { font-family: 'Instrument Serif', serif; font-style: italic; font-size: 14px; color: var(--muted); margin-bottom: 14px; padding: 8px 14px; background: var(--paper); border-radius: 4px; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+  .tag { font-size: 11px; padding: 3px 9px; border-radius: 20px; }
+  .tag.green { background: var(--green-light); color: var(--green); }
+  .tag.red { background: var(--accent-light); color: var(--accent); }
+  .tag.neutral { background: #f3f4f6; color: #6b7280; }
+  .label { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 10px 0 4px; }
+
+  /* Comparison Table */
+  .comparison-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 24px; }
+  .comparison-table th { background: var(--ink); color: white; padding: 13px 14px; text-align: left; font-size: 12px; font-weight: 500; }
+  .comparison-table td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .comparison-table tr:last-child td { border-bottom: none; font-weight: 700; }
+  .comparison-table tr:nth-child(even) td { background: var(--paper); }
+  .stars { color: #f59e0b; }
+  .score-big { font-size: 18px; font-weight: 700; color: var(--accent); }
+
+  /* Patterns */
+  .patterns-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .patterns-grid { grid-template-columns: 1fr; } }
+  .pattern-card { background: var(--white); border-radius: 8px; padding: 20px 22px; border: 1px solid var(--border); border-top: 3px solid var(--accent); }
+  .pattern-card.special { border-top-color: var(--green); }
+  .pattern-num { font-family: 'Instrument Serif', serif; font-size: 34px; color: var(--accent); opacity: 0.25; line-height: 1; margin-bottom: 2px; }
+  .pattern-card.special .pattern-num { color: var(--green); }
+
+  /* SEO Keywords */
+  .keyword-box { display: flex; flex-wrap: wrap; gap: 8px; background: var(--white); padding: 22px; border-radius: 8px; border: 1px solid var(--border); }
+  .kw { padding: 5px 13px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+  .kw.primary { background: var(--ink); color: white; }
+  .kw.secondary { background: var(--accent-light); color: var(--accent); }
+  .kw.free { background: var(--green-light); color: var(--green); }
+  .kw.combo { background: var(--blue-light); color: var(--blue); }
+
+  /* Design Palette */
+  .palette { display: flex; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+  .swatch { padding: 18px 20px; border-radius: 8px; font-size: 11px; font-weight: 600; min-width: 100px; text-align: center; line-height: 1.5; }
+
+  /* Pricing */
+  .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 640px) { .price-grid { grid-template-columns: 1fr; } }
+  .price-table { background: var(--white); border-radius: 8px; border: 1px solid var(--border); overflow: hidden; }
+  .price-table-header { background: var(--ink); color: white; padding: 14px 18px; font-size: 13px; font-weight: 600; }
+  .price-table table { width: 100%; border-collapse: collapse; }
+  .price-table td { padding: 10px 18px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .price-table tr:last-child td { border-bottom: none; }
+  .price-table tr:nth-child(even) td { background: var(--paper); }
+
+  p { margin-bottom: 10px; }
+  ul { padding-left: 18px; }
+  li { margin-bottom: 5px; }
+  .footer-bar { border-top: 1px solid var(--border); padding-top: 24px; color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-label">Wettbewerberanalyse · Kiel 2026</div>
+    <h1>Die Nordmänner<br>Entrümpelung &<br>Umzüge — Marktanalyse</h1>
+    <div class="cover-meta">
+      <span>April 2026</span>
+      <span>Kiel & Umland</span>
+      <span>8 Wettbewerber analysiert</span>
+    </div>
+    <div class="cover-badge">2 Märkte · 1 Strategie</div>
+  </div>
+
+  <!-- EXECUTIVE SUMMARY -->
+  <section>
+    <h2>Executive Summary</h2>
+    <div class="exec-summary">
+      Der Kieler Markt für Entrümpelung und Umzüge wird von spezialisierten Einzelanbietern dominiert — niemand positioniert sich glaubwürdig für beide Leistungen kombiniert. Das ist die entscheidende Lücke für Die Nordmänner. Dazu kommt eine zweite, fast paradoxe Marktlücke: Obwohl fast alle Anbieter "schnell" versprechen, macht keiner Reaktionszeit zu seinem Kern-USP. <strong>"Noch heute vor Ort" + "Entrümpelung & Umzug aus einer Hand"</strong> ist in Kiel vollständig unbesetzt und direkt mit der bestehenden Nordmänner-DNA (2-Minuten-Versprechen, eigene LKW-Flotte) umsetzbar.
+    </div>
+  </section>
+
+  <!-- KILLER INSIGHT -->
+  <div class="highlight-box">
+    <div class="hl-label">Wichtigste Erkenntnis</div>
+    <p><strong>Kein einziger Anbieter in Kiel macht Entrümpelung UND Umzug zusammen.</strong> Rümpel Meister macht nur Entrümpelung. Kühl Umzüge macht nur Umzug. Wer beides braucht — erst ausräumen, dann einziehen — muss heute zwei Anbieter koordinieren. Die Nordmänner können das erste echte "Alles aus einer Hand"-Angebot in Kiel sein. Das ist kein Marketing-Claim, das ist eine echte operative Lücke.</p>
+  </div>
+
+  <!-- ENTRÜMPELUNG WETTBEWERBER -->
+  <section>
+    <h2>Markt 1: Entrümpelung</h2>
+
+    <div class="competitor-grid">
+      <div class="competitor-card">
+        <div class="score-badge top">34/40 — Stärkster</div>
+        <h3>Rümpel Meister</h3>
+        <div class="url">ruempelmeister.de/entruempelung-kiel</div>
+        <div class="headline-quote">"Festpreis ohne Überraschungen"</div>
+        <div class="label">Stärken</div>
+        <div class="tag-list">
+          <span class="tag green">4.9 Google · 223 Reviews</span>
+          <span class="tag green">3.748 ProvenExpert</span>
+          <span class="tag green">TÜV-zertifiziert</span>
+          <span class="tag green">Wertanrechnung (800 € Beispiel)</span>
+        </div>
+        <div class="label">Schwächen</div>
+        <div class="tag-list">
+          <span class="tag red">Nationale Kette, unpersönlich</span>
+          <span class="tag red">Kein Schnelligkeitsversprechen</span>
+        </div>
+      </div>
+
+      <div class="competitor-card">
+        <div class="score-badge mid">31/40 — Lokal stark</div>
+        <h3>Knaack Haushaltsauflösung</h3>
+        <div class="url">haushaltsaufloesung.de</div>
+        <div class="headline-quote">"Diskret. Direkt. Zuverlässig."</div>
+        <div class="label">Stärken</div>
+        <div class="tag-list">
+          <span class="tag green">Angebot in 24h</span>
+          <span class="tag green">Klare Preistabelle</span>
+          <span class="tag green">1,5 Mio. Haftpflicht sichtbar</span>
+        </div>
+        <div class="label">Schwächen</div>
+        <div class="tag-list">
+          <span class="tag red">Nur 10 Google Reviews</span>
+          <span class="tag red">Kein "Heute"-Versprechen</span>
+        </div>
+      </div>
+
+      <div class="competitor-card secondary">
+        <div class="score-badge mid">28/40 — National, lokal schwach</div>
+        <h3>AWL Zentrum</h3>
+        <div class="url">awl-zentrum.de/entruempelung-kiel</div>
+        <div class="headline-quote">"Günstig & Schnell zum Festpreis"</div>
+        <div class="label">Stärken</div>
+        <div class="tag-list">
+          <span class="tag green">2.351 ProvenExpert</span>
+          <span class="tag green">m²-Preistabelle klar</span>
+        </div>
+        <div class="label">Schwächen</div>
+        <div class="tag-list">
+          <span class="tag red">Termine: 1–2 Werktage</span>
+          <span class="tag red">Generisch, kein Lokalflair</span>
+        </div>
+      </div>
+
+      <div class="competitor-card secondary">
+        <div class="score-badge low">19/40 — Schwächster</div>
+        <h3>Rümpel Butler</h3>
+        <div class="url">ruempelbutler.de</div>
+        <div class="headline-quote">"Wir kümmern uns um alles!"</div>
+        <div class="label">Schwächen</div>
+        <div class="tag-list">
+          <span class="tag red">Keine Preise</span>
+          <span class="tag red">Schwache Social Proof</span>
+          <span class="tag red">Generisches Design</span>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Kriterium</th>
+          <th>Rümpel Meister</th>
+          <th>Knaack</th>
+          <th>AWL Zentrum</th>
+          <th>Rümpel Butler</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Bewertungen</td><td><span class="stars">★★★★★</span></td><td><span class="stars">★★★★</span>☆</td><td><span class="stars">★★★★</span>☆</td><td><span class="stars">★★★</span>☆☆</td></tr>
+        <tr><td>Design</td><td><span class="stars">★★★★</span>☆</td><td><span class="stars">★★★★</span>☆</td><td><span class="stars">★★★</span>☆☆</td><td><span class="stars">★★</span>☆☆☆</td></tr>
+        <tr><td>Content-Tiefe</td><td><span class="stars">★★★★★</span></td><td><span class="stars">★★★★★</span></td><td><span class="stars">★★★★</span>☆</td><td><span class="stars">★★★</span>☆☆</td></tr>
+        <tr><td>Reaktionszeit</td><td><span class="stars">★★</span>☆☆☆</td><td><span class="stars">★★★</span>☆☆</td><td><span class="stars">★★</span>☆☆☆</td><td><span class="stars">★</span>☆☆☆☆</td></tr>
+        <tr><td><strong>Gesamt</strong></td><td><span class="score-big">34</span></td><td><span class="score-big">31</span></td><td><span class="score-big">28</span></td><td><span class="score-big">19</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- UMZÜGE WETTBEWERBER -->
+  <section class="page-break">
+    <h2>Markt 2: Umzüge</h2>
+
+    <div class="competitor-grid">
+      <div class="competitor-card">
+        <div class="score-badge top">32/40 — Stärkster</div>
+        <h3>Kühl Umzüge</h3>
+        <div class="url">kuehl-umzuege.de</div>
+        <div class="headline-quote">"Fairer Festpreis · 100% Termintreue"</div>
+        <div class="label">Stärken</div>
+        <div class="tag-list">
+          <span class="tag green">4.9 Sterne</span>
+          <span class="tag green">Online Umzugsrechner</span>
+          <span class="tag green">20+ Jahre Erfahrung</span>
+          <span class="tag green">24/7 erreichbar</span>
+          <span class="tag green">Team-Fotos mit Namen</span>
+        </div>
+        <div class="label">Schwächen</div>
+        <div class="tag-list">
+          <span class="tag red">Kein Lokalflair</span>
+          <span class="tag red">Kein Schnelligkeitsversprechen</span>
+        </div>
+      </div>
+
+      <div class="competitor-card">
+        <div class="score-badge mid">31/40 — Lokal stark</div>
+        <h3>Umzugskönig Müller</h3>
+        <div class="url">umzugskoenig-kiel.de</div>
+        <div class="headline-quote">"Umzug ohne versteckte Kosten"</div>
+        <div class="label">Stärken</div>
+        <div class="tag-list">
+          <span class="tag green">4.9/5 · 800+ Bewertungen</span>
+          <span class="tag green">24h Express-Abwicklung</span>
+          <span class="tag green">Versicherung 7.500 €</span>
+          <span class="tag green">Stadtteile einzeln beschrieben</span>
+        </div>
+        <div class="label">Schwächen</div>
+        <div class="tag-list">
+          <span class="tag red">Generisches Design</span>
+          <span class="tag red">Kein "Heute"-Versprechen</span>
+        </div>
+      </div>
+
+      <div class="competitor-card secondary">
+        <div class="score-badge mid">18/40 — Schwache Seite, starke Reviews</div>
+        <h3>M&H Transport</h3>
+        <div class="url">sirelo.de · Kiel</div>
+        <div class="headline-quote">"Hilfsbereit, flexibel, zuverlässig"</div>
+        <div class="label">Stärken</div>
+        <div class="tag-list">
+          <span class="tag green">10/10 · 100% Empfehlung</span>
+          <span class="tag green">117 Bewertungen</span>
+        </div>
+        <div class="label">Schwächen</div>
+        <div class="tag-list">
+          <span class="tag red">Keine eigene Website</span>
+          <span class="tag red">Keine Preise</span>
+          <span class="tag red">Keine SEO-Präsenz</span>
+        </div>
+      </div>
+
+      <div class="competitor-card secondary">
+        <div class="score-badge low">16/40 — Minimal</div>
+        <h3>Nordwind Umzüge</h3>
+        <div class="url">Kiel-Mitte</div>
+        <div class="tag-list">
+          <span class="tag red">Kaum Online-Präsenz</span>
+          <span class="tag red">Keine Differenzierung</span>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Kriterium</th>
+          <th>Kühl Umzüge</th>
+          <th>Umzugskönig</th>
+          <th>M&H Transport</th>
+          <th>Nordwind</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Bewertungen</td><td><span class="stars">★★★★★</span></td><td><span class="stars">★★★★★</span></td><td><span class="stars">★★★★★</span></td><td><span class="stars">★★★</span>☆☆</td></tr>
+        <tr><td>Umzugsrechner</td><td><span class="stars">★★★★★</span></td><td><span class="stars">★★★</span>☆☆</td><td>—</td><td>—</td></tr>
+        <tr><td>Design</td><td><span class="stars">★★★★</span>☆</td><td><span class="stars">★★★</span>☆☆</td><td><span class="stars">★★</span>☆☆☆</td><td><span class="stars">★★</span>☆☆☆</td></tr>
+        <tr><td>Reaktionszeit</td><td><span class="stars">★★★</span>☆☆</td><td><span class="stars">★★★★</span>☆</td><td><span class="stars">★★</span>☆☆☆</td><td><span class="stars">★</span>☆☆☆☆</td></tr>
+        <tr><td><strong>Gesamt</strong></td><td><span class="score-big">32</span></td><td><span class="score-big">31</span></td><td><span class="score-big">18</span></td><td><span class="score-big">16</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- MARKTPREISE -->
+  <section>
+    <h2>Marktpreise Kiel</h2>
+    <div class="price-grid">
+      <div class="price-table">
+        <div class="price-table-header">Entrümpelung</div>
+        <table>
+          <tr><td>1-Zi / ~40m²</td><td><strong>750–1.000 €</strong></td></tr>
+          <tr><td>2-Zi</td><td><strong>790–1.190 €</strong></td></tr>
+          <tr><td>3-Zi</td><td><strong>1.190–1.590 €</strong></td></tr>
+          <tr><td>4-Zi</td><td><strong>1.590–2.490 €</strong></td></tr>
+        </table>
+      </div>
+      <div class="price-table">
+        <div class="price-table-header">Umzüge</div>
+        <table>
+          <tr><td>~30m² / 1-Zi</td><td><strong>ab 350 €</strong></td></tr>
+          <tr><td>~60m² / 2-Zi</td><td><strong>ab 700 €</strong></td></tr>
+          <tr><td>~80m² / 3-Zi</td><td><strong>ab 800 €</strong></td></tr>
+          <tr><td>100m²+</td><td><strong>ab 1.000 €</strong></td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATTERNS -->
+  <section class="page-break">
+    <h2>Muster der Top 10%</h2>
+    <div class="patterns-grid">
+      <div class="pattern-card">
+        <div class="pattern-num">01</div>
+        <h3>Festpreis steht im Hero</h3>
+        <p>Alle Gewinner in beiden Märkten. Kein Anbieter der "Angebot nach Besichtigung" als Hauptbotschaft hat gewinnt.</p>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">02</div>
+        <h3>Kostenlose Besichtigung / Voranschlag</h3>
+        <p>Einstiegshürde auf null. Pflicht, kein USP mehr. Wer es nicht anbietet, verliert direkt beim Vergleich.</p>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">03</div>
+        <h3>3-Schritte-Prozess</h3>
+        <p>Universal: Kontakt → Besichtigung/Angebot → Fertig. Jede Top-Seite visualisiert das. Reduziert mentale Hürde.</p>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">04</div>
+        <h3>Social Proof mit Zahlen</h3>
+        <p>"4.9 · 800 Bewertungen" schlägt jeden Text. Ohne vierstellige Bewertungszahl wirkt man wie ein Neueinsteiger.</p>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">05</div>
+        <h3>Lokale Stadtteile nennen</h3>
+        <p>Umzugskönig beschreibt Gaarden, Düsternbrook, Wik einzeln. Rankt local besser und wirkt echter als jede Kette.</p>
+      </div>
+      <div class="pattern-card special">
+        <div class="pattern-num">06</div>
+        <h3>Reaktionszeit — komplett frei ✦</h3>
+        <p>Kein Anbieter in Entrümpelung ODER Umzug hat "Noch heute" als Kernversprechen. Das ist die Lücke.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEO KEYWORDS -->
+  <section>
+    <h2>SEO-Keywords & Chancen</h2>
+    <div class="keyword-box">
+      <span class="kw primary">Entrümpelung Kiel</span>
+      <span class="kw primary">Haushaltsauflösung Kiel</span>
+      <span class="kw primary">Umzugsunternehmen Kiel</span>
+      <span class="kw primary">Umzug Kiel</span>
+      <span class="kw secondary">Entrümpelung Kiel Festpreis</span>
+      <span class="kw secondary">Kellerräumung Kiel</span>
+      <span class="kw secondary">Möbeltransport Kiel</span>
+      <span class="kw secondary">Umzug Kiel günstig</span>
+      <span class="kw free">Entrümpelung Kiel sofort ✦</span>
+      <span class="kw free">Entrümpelung Kiel heute ✦</span>
+      <span class="kw free">Umzug Kiel gleicher Tag ✦</span>
+      <span class="kw free">Schnelle Entrümpelung Kiel ✦</span>
+      <span class="kw combo">Entrümpelung und Umzug Kiel ◆</span>
+      <span class="kw combo">Umzug mit Entrümpelung Kiel ◆</span>
+    </div>
+    <p style="margin-top:10px; font-size:12px; color:var(--muted);">✦ = freie Speed-Nische · ◆ = Kombinations-Keywords, niemand konkurriert</p>
+  </section>
+
+  <!-- DESIGN DIRECTION -->
+  <section>
+    <h2>Empfohlene Design-Richtung</h2>
+
+    <div class="highlight-box">
+      <div class="hl-label">Positionierung</div>
+      <p>Alle 8 analysierten Wettbewerber sind hell, generisch, türkis oder blau. <strong>Die Nordmänner gewinnen durch radikale visuelle Differenzierung:</strong> dunkel, kräftig, Orange-Akzent. Ein Besucher der vier Browser-Tabs vergleicht, erkennt die Nordmänner-Seite sofort — das ist der erste Schritt zur Konversion.</p>
+    </div>
+
+    <h3 style="margin: 20px 0 12px;">Farbpalette</h3>
+    <div class="palette">
+      <div class="swatch" style="background:#1a1a1a; color:white;">Anthrazit<br><small>#1a1a1a</small></div>
+      <div class="swatch" style="background:#e8590c; color:white;">Akzent-Orange<br><small>#e8590c</small></div>
+      <div class="swatch" style="background:#f5f4f0; color:#1a1a1a; border:1px solid #ddd;">Off-White<br><small>#f5f4f0</small></div>
+      <div class="swatch" style="background:#22c55e; color:white;">Trust-Grün<br><small>#22c55e</small></div>
+    </div>
+
+    <h3 style="margin: 20px 0 8px;">Hero-Headline Empfehlung</h3>
+    <div class="exec-summary" style="font-size:21px; font-family:'Instrument Serif',serif;">
+      "Entrümpelung & Umzüge Kiel — Noch heute vor Ort."
+    </div>
+    <p style="margin-top:8px; font-size:13px; color:var(--muted);">Subline: Ein Anbieter für alles. Festpreis. Kostenlose Besichtigung.</p>
+
+    <h3 style="margin: 20px 0 8px;">Kombinations-USP (einzigartig im Markt)</h3>
+    <div class="exec-summary" style="font-size:18px; font-family:'Instrument Serif',serif; border-left-color: var(--green);">
+      "Erst räumen wir aus — dann ziehen wir ein."
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer-bar">
+    <span>Die Nordmänner — Wettbewerberanalyse Entrümpelung & Umzüge Kiel</span>
+    <span>April 2026</span>
+  </div>
+
+</div>
+</body>
+</html>

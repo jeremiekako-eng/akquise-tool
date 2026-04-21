@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vorher / Nachher Slider</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #111111;
+  font-family: 'Inter', sans-serif;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.slider-section {
+  padding: 0 0 48px;
+}
+
+.slider-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── SINGLE SLIDER ── */
+.ba-slider {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: col-resize;
+  user-select: none;
+  -webkit-user-select: none;
+  aspect-ratio: 4/3;
+  background: #1c1c1c;
+}
+
+.ba-slider img {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.ba-after-wrap {
+  position: absolute;
+  top: 0; left: 0;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: width 0s;
+}
+
+.ba-after-wrap img {
+  width: auto;
+  min-width: 100%;
+  max-width: none;
+  /* compensate for clip — keep image full size */
+}
+
+/* Handle */
+.ba-handle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  cursor: col-resize;
+}
+
+.ba-line {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  background: #e8590c;
+}
+
+.ba-circle {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: #e8590c;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 12px rgba(232,89,12,0.5);
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.ba-arrows {
+  display: flex; gap: 4px; align-items: center;
+  color: white; font-size: 16px; font-weight: 700;
+}
+
+/* Labels */
+.ba-label {
+  position: absolute;
+  top: 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 3px;
+  z-index: 5;
+  pointer-events: none;
+}
+.ba-label.before {
+  left: 14px;
+  background: rgba(0,0,0,0.7);
+  color: rgba(255,255,255,0.85);
+}
+.ba-label.after {
+  right: 14px;
+  background: #e8590c;
+  color: white;
+}
+
+/* Caption */
+.ba-caption {
+  padding: 12px 16px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  background: #1a1a1a;
+  border-radius: 0 0 10px 10px;
+  border-top: 1px solid #2a2a2a;
+  margin-top: -10px;
+  display: none; /* show if needed */
+}
+
+/* Placeholder when no image */
+.ba-placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px;
+  color: rgba(255,255,255,0.2);
+  font-size: 13px;
+  background: #1c1c1c;
+}
+.ba-placeholder .ph-icon { font-size: 36px; opacity: 0.3; }
+</style>
+</head>
+<body>
+
+<div class="slider-section">
+  <div class="slider-grid">
+
+    <!-- SLIDER 1 -->
+    <div>
+      <div class="ba-slider" id="slider1" data-pos="50">
+        <!-- BEFORE image (right/bottom layer) -->
+        <img class="ba-before-img"
+          src="images/before1.jpg"
+          alt="Vorher"
+          onerror="this.style.display='none'; this.parentElement.querySelector('.ba-placeholder').style.display='flex'">
+
+        <!-- Placeholder if no image -->
+        <div class="ba-placeholder" style="display:none">
+          <div class="ph-icon">📷</div>
+          <span>Vorher-Foto hier einfügen</span>
+        </div>
+
+        <!-- AFTER image (left clip) -->
+        <div class="ba-after-wrap">
+          <img class="ba-after-img"
+            src="images/after1.jpg"
+            alt="Nachher"
+            onerror="this.style.display='none'">
+        </div>
+
+        <!-- Labels -->
+        <span class="ba-label before">Vorher</span>
+        <span class="ba-label after">Nachher</span>
+
+        <!-- Handle -->
+        <div class="ba-handle">
+          <div class="ba-line"></div>
+          <div class="ba-circle">
+            <div class="ba-arrows">‹ ›</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.ba-slider').forEach(slider => {
+  const afterWrap = slider.querySelector('.ba-after-wrap');
+  const handle    = slider.querySelector('.ba-handle');
+  let active = false;
+
+  function setPos(x) {
+    const rect = slider.getBoundingClientRect();
+    let pct = ((x - rect.left) / rect.width) * 100;
+    pct = Math.min(Math.max(pct, 2), 98);
+    afterWrap.style.width = pct + '%';
+    handle.style.left     = pct + '%';
+
+    // keep after-image full width regardless of clip
+    const afterImg = afterWrap.querySelector('.ba-after-img');
+    if (afterImg) {
+      afterImg.style.width  = (100 / (pct / 100)) + '%';
+      afterImg.style.maxWidth = 'none';
+    }
+  }
+
+  // init
+  setPos(slider.getBoundingClientRect().left + slider.offsetWidth * 0.5);
+
+  // Mouse
+  slider.addEventListener('mousedown', e => { active = true; setPos(e.clientX); });
+  window.addEventListener('mousemove', e => { if (active) setPos(e.clientX); });
+  window.addEventListener('mouseup',   () => { active = false; });
+
+  // Touch
+  slider.addEventListener('touchstart', e => { active = true; setPos(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('touchmove',  e => { if (active) setPos(e.touches[0].clientX); }, { passive: true });
+  window.addEventListener('touchend',   () => { active = false; });
+});
+</script>
+</body>
+</html>
