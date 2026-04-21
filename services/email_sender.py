@@ -10,10 +10,10 @@ def send_quote_email(to_email: str, customer_name: str, pdf_path: str, quote_id:
         pdf_bytes = f.read()
 
     resend.Emails.send({
-        'from': 'Die Nordmänner <info@dienordmaenner.com>',
+        'from': 'Die Nordmänner <info@nordmaenner.com>',
         'to': [to_email],
-        'bcc': ['info@dienordmaenner.com'],
-        'reply_to': 'info@dienordmaenner.com',
+        'bcc': ['info@nordmaenner.com'],
+        'reply_to': 'info@nordmaenner.com',
         'subject': f'Ihr Angebot #{quote_id} – Die Nordmänner',
         'html': f"""
         <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;background:#f7f8fa;padding:32px;border-radius:12px">

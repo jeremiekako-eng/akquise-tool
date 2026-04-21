@@ -1748,21 +1748,46 @@ function wizSubmit() {
   const email = document.getElementById('w-email').value.trim();
   if (!name || (!phone && !email)) { alert('Bitte Name und Telefon oder E-Mail angeben.'); return; }
 
-  // In production: POST to backend. For now: mailto fallback
-  const svcLabel = { transport: 'Transport', umzug: 'Umzug', entruempelung: 'Entrümpelung' }[wizData.service_type] || wizData.service_type;
-  const subject = encodeURIComponent(`Angebotsanfrage: ${svcLabel} — Die Nordmänner`);
-  const body = encodeURIComponent(
-    `Name: ${name}\nTelefon: ${phone}\nE-Mail: ${email}\n\n` +
-    `Leistung: ${svcLabel}\nVon: ${wizData.from || '-'}\nNach: ${wizData.to || '-'}\n` +
-    `Entfernung: ${wizData.km} km\nGewicht: ${wizData.kg} kg\n` +
-    `Express: ${wizData.express ? 'Ja' : 'Nein'}\n` +
-    `Datum: ${wizData.date || 'Flexibel'}\n\n` +
-    `Geschätzter Preis: ${wizData.result?.gross?.toFixed(2)} € (inkl. MwSt.)`
-  );
-  window.open(`mailto:info@nordmaenner.com?subject=${subject}&body=${body}`);
+  const btn = document.querySelector('#wstep-4 .wiz-next');
+  btn.disabled = true;
+  btn.textContent = 'Wird gesendet …';
 
-  document.getElementById('wiz-wrapper').style.display = 'none';
-  document.getElementById('wiz-success').classList.add('visible');
+  const payload = {
+    name,
+    phone,
+    email: email || '',
+    service_type:      wizData.service_type,
+    distance_km:       wizData.km,
+    duration_minutes:  Math.round(wizData.km / 80 * 60),
+    weight_kg:         wizData.kg,
+    volume_m3:         10,
+    is_express:        !!wizData.express,
+    date:              wizData.date || '',
+    from_address:      wizData.from || '',
+    to_address:        wizData.to || ''
+  };
+
+  fetch('/api/submit-quote', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      document.getElementById('wiz-wrapper').style.display = 'none';
+      document.getElementById('wiz-success').classList.add('visible');
+    } else {
+      alert('Fehler: ' + (data.error || 'Unbekannter Fehler'));
+      btn.disabled = false;
+      btn.textContent = 'Angebot anfordern →';
+    }
+  })
+  .catch(() => {
+    alert('Verbindungsfehler. Bitte ruf uns direkt an: 0160 94904681');
+    btn.disabled = false;
+    btn.textContent = 'Angebot anfordern →';
+  });
 }
 
 // Smooth nav highlight on scroll
