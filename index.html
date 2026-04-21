@@ -533,12 +533,102 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
 .mt-24 { margin-top: 24px; }
 .mt-32 { margin-top: 32px; }
 
+/* ── HAMBURGER ── */
+.nav-hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 4px;
+}
+.nav-hamburger span {
+  display: block; width: 24px; height: 2px;
+  background: white; border-radius: 2px; transition: all 0.3s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+/* ── STICKY MOBILE PHONE BAR ── */
+.mobile-bar {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+  background: var(--dark2); border-top: 1px solid var(--border);
+  padding: 12px 16px; gap: 10px;
+}
+.mobile-bar a {
+  flex: 1; text-align: center; padding: 13px 8px;
+  border-radius: 6px; font-weight: 700; font-size: 15px;
+  text-decoration: none; font-family: 'Inter', sans-serif;
+}
+.mobile-bar .mb-call { background: var(--orange); color: white; }
+.mobile-bar .mb-offer { background: var(--dark3); color: white; border: 1px solid var(--border); }
+
 @media(max-width:768px) {
-  nav { padding: 0 20px; }
-  .nav-links { display: none; }
-  .hero-content, .section, .section-full, .cta-section, .combo-section, .contact-teaser, .newsletter { padding-left: 20px; padding-right: 20px; }
-  .about-inner { gap: 40px; }
-  .cta-inner { gap: 40px; }
+  /* NAV */
+  nav { padding: 0 16px; }
+  .nav-hamburger { display: flex; }
+  .nav-links {
+    display: none; position: absolute; top: 68px; left: 0; right: 0;
+    background: rgba(10,10,10,0.98); backdrop-filter: blur(12px);
+    flex-direction: column; gap: 0; padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links li a { display: block; padding: 14px 24px; font-size: 15px; color: rgba(255,255,255,0.8); }
+  .nav-cta .btn { display: none; }
+  .nav-phone { font-size: 13px; }
+
+  /* STICKY PHONE BAR */
+  .mobile-bar { display: flex; }
+  body { padding-bottom: 72px; }
+
+  /* SECTIONS — less vertical padding */
+  .section { padding: 56px 16px; }
+  .section-full { padding: 56px 16px; }
+  .section-full .inner { padding: 0; }
+  .combo-section { padding: 56px 16px; }
+  .cta-section { padding: 56px 16px; }
+  .contact-teaser { padding: 56px 16px; }
+  .newsletter { padding: 32px 16px; }
+  footer { padding: 48px 16px 24px; }
+  .hero-content { padding: 56px 16px 80px; }
+
+  /* HERO */
+  .hero p { font-size: 15px; margin-bottom: 28px; }
+  .hero-badges { gap: 12px; margin-top: 28px; }
+  .btn-group { flex-direction: column; align-items: stretch; }
+  .btn-group .btn { text-align: center; justify-content: center; }
+
+  /* SECTION HEADER */
+  .section-header { margin-bottom: 36px; }
+
+  /* ABOUT */
+  .about-inner { gap: 32px; }
+  .about-img { height: 260px; }
+
+  /* CTA */
+  .cta-inner { gap: 32px; }
+
+  /* NEWSLETTER */
+  .newsletter-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .newsletter-form { flex-direction: column; width: 100%; }
+  .newsletter-form input { min-width: unset; width: 100%; border-right: 1px solid #ddd; border-radius: 6px; margin-bottom: 8px; }
+  .newsletter-form button { border-radius: 6px; width: 100%; }
+
+  /* PRICE CARDS */
+  .pc-price { font-size: 38px !important; }
+
+  /* PRICING TABS */
+  .pricing-tabs { width: 100%; }
+  .pricing-tab { flex: 1; padding: 12px 8px; font-size: 13px; }
+
+  /* FOOTER */
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .footer-grid { gap: 20px; }
+
+  /* MODAL */
+  .modal-box { padding: 24px 16px; max-height: 85vh; }
+
+  /* COMBO */
+  .combo-inner { gap: 36px; }
 }
 </style>
 </head>
@@ -558,7 +648,16 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
     <a href="tel:+494312345678" class="nav-phone">0431 123 456 78</a>
     <a href="#angebot" class="btn btn-primary">Anrufen</a>
   </div>
+  <button class="nav-hamburger" id="navHamburger" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- STICKY MOBILE BAR -->
+<div class="mobile-bar">
+  <a href="tel:+494312345678" class="mb-call">📞 Anrufen</a>
+  <a href="#angebot" class="mb-offer">Angebot anfragen</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1663,6 +1762,20 @@ window.addEventListener('scroll', () => {
   } else {
     nav.style.background = 'rgba(10,10,10,0.92)';
   }
+});
+
+// Hamburger menu
+const hamburger = document.getElementById('navHamburger');
+const navLinks  = document.querySelector('.nav-links');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  navLinks.classList.toggle('open');
+});
+navLinks.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+  });
 });
 </script>
 </body>
