@@ -580,55 +580,68 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
   .mobile-bar { display: flex; }
   body { padding-bottom: 72px; }
 
-  /* SECTIONS — less vertical padding */
-  .section { padding: 56px 16px; }
-  .section-full { padding: 56px 16px; }
+  /* SECTIONS — kompakte vertikale Abstände */
+  .section { padding: 40px 16px; }
+  .section-full { padding: 40px 16px; }
   .section-full .inner { padding: 0; }
-  .combo-section { padding: 56px 16px; }
-  .cta-section { padding: 56px 16px; }
-  .contact-teaser { padding: 56px 16px; }
-  .newsletter { padding: 32px 16px; }
-  footer { padding: 48px 16px 24px; }
-  .hero-content { padding: 56px 16px 80px; }
+  .combo-section { padding: 40px 16px; }
+  .cta-section { padding: 40px 16px; }
+  .contact-teaser { padding: 40px 16px; }
+  .newsletter { padding: 24px 16px; }
+  footer { padding: 36px 16px 16px; }
 
-  /* HERO */
-  .hero p { font-size: 15px; margin-bottom: 28px; }
-  .hero-badges { gap: 12px; margin-top: 28px; }
+  /* HERO — kein Full-Viewport auf Mobile */
+  .hero { min-height: auto; }
+  .hero-content { padding: 40px 16px 56px; }
+  .hero p { font-size: 15px; margin-bottom: 20px; }
+  .hero-badges { gap: 10px; margin-top: 20px; }
+  .hero-badge { font-size: 12px; }
   .btn-group { flex-direction: column; align-items: stretch; }
   .btn-group .btn { text-align: center; justify-content: center; }
 
   /* SECTION HEADER */
-  .section-header { margin-bottom: 36px; }
+  .section-header { margin-bottom: 28px; }
+  .section-header h2 { margin-bottom: 8px; }
+  .review-header { margin-bottom: 28px; }
+
+  /* CARDS */
+  .trust-card { padding: 22px 18px; }
+  .photo-card { min-height: 220px; }
+  .process-step .ps-img { height: 160px; }
+  .situation-card .sc-img { height: 140px; }
+  .combo-visual { padding: 24px 16px; }
 
   /* ABOUT */
-  .about-inner { gap: 32px; }
-  .about-img { height: 260px; }
+  .about-inner { gap: 24px; }
+  .about-img { height: 220px; }
+  .about-stats { margin-top: 24px; gap: 16px; }
 
   /* CTA */
-  .cta-inner { gap: 32px; }
+  .cta-inner { gap: 24px; }
+  .form-card { padding: 24px 16px; }
 
   /* NEWSLETTER */
-  .newsletter-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .newsletter-inner { flex-direction: column; align-items: flex-start; gap: 16px; }
   .newsletter-form { flex-direction: column; width: 100%; }
   .newsletter-form input { min-width: unset; width: 100%; border-right: 1px solid #ddd; border-radius: 6px; margin-bottom: 8px; }
   .newsletter-form button { border-radius: 6px; width: 100%; }
 
-  /* PRICE CARDS */
+  /* PRICING */
   .pc-price { font-size: 38px !important; }
-
-  /* PRICING TABS */
   .pricing-tabs { width: 100%; }
   .pricing-tab { flex: 1; padding: 12px 8px; font-size: 13px; }
+  .price-card { padding: 20px 16px; }
 
   /* FOOTER */
   .footer-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .footer-grid { gap: 20px; }
+  .footer-grid { gap: 16px; margin-bottom: 28px; }
 
   /* MODAL */
-  .modal-box { padding: 24px 16px; max-height: 85vh; }
+  .modal-box { padding: 20px 14px; max-height: 88vh; }
 
   /* COMBO */
-  .combo-inner { gap: 36px; }
+  .combo-inner { gap: 24px; }
+  .combo-icon { font-size: 36px; margin-bottom: 16px; }
 }
 </style>
 </head>
