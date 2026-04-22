@@ -359,7 +359,7 @@ nav {
 .review-card .stars { color: #f59e0b; font-size: 14px; margin-bottom: 14px; }
 .review-card p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.7; margin-bottom: 20px; font-style: italic; }
 .review-author { display: flex; align-items: center; gap: 12px; }
-.review-avatar { width: 42px; height: 42px; border-radius: 50%; overflow: hidden; }
+.review-avatar { width: 42px; height: 42px; border-radius: 50%; overflow: hidden; background: var(--dark3); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; color: var(--orange); flex-shrink: 0; }
 .review-avatar img { width: 100%; height: 100%; object-fit: cover; }
 .review-name { font-weight: 600; font-size: 14px; }
 .review-loc { font-size: 12px; color: var(--muted); }
@@ -785,7 +785,7 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
 
 <!-- HERO -->
 <section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline preload="auto">
+  <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="images/before1.jpg">
     <source src="hero.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
@@ -804,7 +804,7 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
     <div class="hero-badges">
       <span class="hero-badge">Kein Subunternehmer</span>
       <span class="hero-badge">Festpreis garantiert</span>
-      <span class="hero-badge">Seit 2015 in Kiel</span>
+      <span class="hero-badge">Lokal in Kiel & Umland</span>
       <span class="hero-badge">Oft innerhalb 24h</span>
     </div>
   </div>
@@ -816,7 +816,7 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
     <div class="section-header center">
       <span class="label">Warum wir</span>
       <h2>Warum Kiel uns vertraut</h2>
-      <p>Über 200 abgeschlossene Aufträge in Kiel und Umland — schnell, zuverlässig, fair</p>
+      <p>Lokales Team aus Kiel — schnell, zuverlässig, faire Festpreise</p>
     </div>
     <div class="grid-3">
       <div class="trust-card featured">
@@ -1192,16 +1192,14 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
       <span class="label" style="text-align:center;display:block;">Bewertungen</span>
       <div class="review-stars">⭐⭐⭐⭐⭐</div>
       <h2 style="margin-bottom:8px;">Das sagen unsere Kunden</h2>
-      <div class="review-meta"><strong>4.9 Sterne</strong> auf Google. Über 200 zufriedene Kunden in Kiel.</div>
+      <div class="review-meta">Was unsere Kunden sagen</div>
     </div>
     <div class="review-grid">
       <div class="review-card">
         <div class="stars">★★★★★</div>
         <p>"Wohnungsauflösung nach dem Tod meines Vaters — die Nordmänner haben das diskret, schnell und zum Festpreis erledigt. Kein Stress, keine Überraschungen. Absolut empfehlenswert."</p>
         <div class="review-author">
-          <div class="review-avatar">
-            <img src="https://i.pravatar.cc/42?img=1" alt="Kundin">
-          </div>
+          <div class="review-avatar">MP</div>
           <div>
             <div class="review-name">Marcus Petersen</div>
             <div class="review-loc">Kiel-Gaarden</div>
@@ -1212,9 +1210,7 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
         <div class="stars">★★★★★</div>
         <p>"Umzug von Kiel nach Rendsburg — alles perfekt organisiert, pünktlich und zum vereinbarten Preis. Das Team war freundlich und hat auch schwere Möbel ohne Probleme geschleppt."</p>
         <div class="review-author">
-          <div class="review-avatar">
-            <img src="https://i.pravatar.cc/42?img=5" alt="Kundin">
-          </div>
+          <div class="review-avatar">MH</div>
           <div>
             <div class="review-name">Mila Hoffmann</div>
             <div class="review-loc">Kiel-Düsternbrook</div>
@@ -1225,9 +1221,7 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
         <div class="stars">★★★★★</div>
         <p>"Kellerräumung in Kiel-Gaarden — innerhalb von 2 Tagen Termin bekommen, alles an einem Tag erledigt. Der Keller war danach wirklich besenrein. Preis war fair und vorab klar."</p>
         <div class="review-author">
-          <div class="review-avatar">
-            <img src="https://i.pravatar.cc/42?img=9" alt="Kundin">
-          </div>
+          <div class="review-avatar">JM</div>
           <div>
             <div class="review-name">Jens Müller</div>
             <div class="review-loc">Kiel-Wellingdorf</div>
@@ -1311,7 +1305,7 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
         <span class="label orange">Team</span>
         <h2>Wir sind die Nordmänner</h2>
         <p>Lokale Jungs, eigene Trucks, keine Subunternehmer.</p>
-        <p>Seit 2015 räumen wir Kieler Wohnungen aus und ziehen Kieler Haushalte um. Wir kennen die Stadt, die Straßen und die Leute — und wir stehen für das, was wir tun.</p>
+        <p>Wir sind ein lokales Team aus Kiel — wir kennen die Stadt, die Straßen und die Leute. Wir stehen persönlich für jeden Auftrag und arbeiten ohne Subunternehmer.</p>
         <p>Kein Call Center, kein Vermittler. Du rufst an und sprichst direkt mit dem Team, das auch kommt.</p>
         <div class="about-stats">
           <div class="about-stat">
@@ -1392,6 +1386,12 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
             <label>Wunschtermin</label>
             <input type="date">
           </div>
+        </div>
+        <div class="form-group" style="margin-top:4px;">
+          <label style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:rgba(255,255,255,0.55);text-transform:none;letter-spacing:0;cursor:pointer;">
+            <input type="checkbox" id="dsgvo-consent" required style="width:auto;margin-top:2px;flex-shrink:0;">
+            Ich stimme der Verarbeitung meiner Daten zur Angebotserstellung zu. Mehr dazu in unserer <a href="/datenschutz.html" style="color:var(--orange);">Datenschutzerklärung</a>.
+          </label>
         </div>
         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">
           Kostenloses Angebot anfordern
@@ -1512,11 +1512,8 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
       <div class="footer-col">
         <h4>Über uns</h4>
         <ul>
-          <li><a href="#">Unser Team</a></li>
-          <li><a href="#">Arbeitsweise</a></li>
-          <li><a href="#">Bewertungen</a></li>
-          <li><a href="#">Galerie</a></li>
-          <li><a href="#">Impressum</a></li>
+          <li><a href="#bewertungen">Bewertungen</a></li>
+          <li><a href="/impressum.html">Impressum</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -1541,11 +1538,8 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
       <div class="footer-col">
         <h4>Rechtliches</h4>
         <ul>
-          <li><a href="#">Datenschutzrichtlinie</a></li>
-          <li><a href="#">Nutzungsbedingungen</a></li>
-          <li><a href="#">Cookie-Einstellungen</a></li>
-          <li><a href="#">Impressum</a></li>
-          <li><a href="#">Sitemap</a></li>
+          <li><a href="/datenschutz.html">Datenschutzrichtlinie</a></li>
+          <li><a href="/impressum.html">Impressum</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -1709,7 +1703,7 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
     <div class="wiz-success" id="wiz-success">
       <div class="wiz-success-icon">✅</div>
       <h3>Anfrage gesendet!</h3>
-      <p>Wir melden uns innerhalb von <strong style="color:var(--orange)">2 Minuten</strong> bei dir.<br>
+      <p>Wir melden uns <strong style="color:var(--orange)">innerhalb 1 Stunde</strong> bei dir (Mo–Sa 7–19 Uhr).<br>
       Schau auch in deinen Spam-Ordner falls nötig.</p>
       <button class="btn btn-primary mt-24" onclick="closePriceModal()">Schließen</button>
     </div>
