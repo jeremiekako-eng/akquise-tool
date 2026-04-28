@@ -132,7 +132,7 @@
   --green: #22c55e;
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 body { font-family: 'Inter', sans-serif; background: var(--dark); color: var(--white); font-size: 15px; line-height: 1.6; overflow-x: hidden; }
 
 /* TYPOGRAPHY */
@@ -643,6 +643,16 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
 .mt-24 { margin-top: 24px; }
 .mt-32 { margin-top: 32px; }
 
+/* ── DROPDOWN NAV ── */
+.has-drop { position: relative; }
+.has-drop > a::after { content: ' ▾'; font-size: 10px; opacity: 0.6; }
+.dropdown { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: rgba(6,13,24,0.99); border: 1px solid var(--border); border-radius: 6px; min-width: 220px; padding: 6px 0; z-index: 300; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+.has-drop:hover .dropdown { display: block; }
+.dropdown li { list-style: none; }
+.dropdown li a { display: block; padding: 10px 18px; font-size: 13px; color: rgba(255,255,255,0.8); text-decoration: none; border-bottom: 1px solid var(--border); }
+.dropdown li:last-child a { border-bottom: none; }
+.dropdown li a:hover { color: white; background: var(--dark3); }
+
 /* ── HAMBURGER ── */
 .nav-hamburger {
   display: none; flex-direction: column; gap: 5px;
@@ -685,6 +695,9 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
   .nav-links li a { display: block; padding: 14px 24px; font-size: 15px; color: rgba(255,255,255,0.8); }
   .nav-cta .btn { display: none; }
   .nav-phone { font-size: 13px; }
+  .has-drop > a::after { display: none; }
+  .dropdown { display: block; position: static; border: none; padding: 0; background: none; box-shadow: none; }
+  .dropdown li a { padding: 10px 24px 10px 40px; font-size: 13px; color: rgba(255,255,255,0.55); border-bottom: none; }
 
   /* STICKY PHONE BAR */
   .mobile-bar { display: flex; }
@@ -761,8 +774,16 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
 <nav>
   <a href="#" class="nav-logo">Die <span>Nord</span>männer</a>
   <ul class="nav-links">
-    <li><a href="#leistungen">Leistungen</a></li>
-    <li><a href="#transporte">Transporte</a></li>
+    <li class="has-drop">
+      <a href="#leistungen">Leistungen</a>
+      <ul class="dropdown">
+        <li><a href="/entruempelung-kiel.html">Entrümpelung Kiel</a></li>
+        <li><a href="/wohnungsaufloesung-kiel.html">Wohnungsauflösung</a></li>
+        <li><a href="/kellerraum-kiel.html">Kellerräumung</a></li>
+        <li><a href="/dachboden-kiel.html">Dachboden entrümpeln</a></li>
+        <li><a href="/privatumzug-kiel.html">Privatumzug</a></li>
+      </ul>
+    </li>
     <li><a href="#preise">Preise</a></li>
     <li><a href="#bewertungen">Bewertungen</a></li>
     <li><a href="#faq">FAQ</a></li>
@@ -1502,11 +1523,11 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
       <div class="footer-col">
         <h4>Leistungen</h4>
         <ul>
-          <li><a href="#">Entrümpelung</a></li>
-          <li><a href="#">Umzüge</a></li>
-          <li><a href="#">Kontakt</a></li>
-          <li><a href="#">Angebot</a></li>
-          <li><a href="#">FAQ</a></li>
+          <li><a href="/entruempelung-kiel.html">Entrümpelung Kiel</a></li>
+          <li><a href="/wohnungsaufloesung-kiel.html">Wohnungsauflösung</a></li>
+          <li><a href="/kellerraum-kiel.html">Kellerräumung</a></li>
+          <li><a href="/dachboden-kiel.html">Dachboden entrümpeln</a></li>
+          <li><a href="/privatumzug-kiel.html">Privatumzug</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -1935,6 +1956,13 @@ const navLinks  = document.querySelector('.nav-links');
 hamburger.addEventListener('click', () => {
   hamburger.classList.toggle('open');
   navLinks.classList.toggle('open');
+});
+// Menü schließen wenn ein Nav-Link angeklickt wird
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    navLinks.classList.remove('open');
+  });
 });
 navLinks.querySelectorAll('a').forEach(a => {
   a.addEventListener('click', () => {
