@@ -310,7 +310,7 @@ nav {
   width: 100%; height: 220px; border-radius: 8px; overflow: hidden;
   margin-bottom: 20px; position: relative;
 }
-.process-step .ps-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.process-step .ps-img img { width: 100%; height: 100%; object-fit: cover; }
 .process-step .ps-num {
   font-family: 'Oswald', sans-serif; font-size: 48px; font-weight: 700;
   color: var(--orange); margin-bottom: 8px; display: block;
@@ -1063,7 +1063,7 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
       </div>
       <div class="process-step">
         <div class="ps-img">
-          <img src="/images/team-van.png" alt="Besichtigung">
+          <img src="/images/team-van.png" alt="Besichtigung" style="object-position: center 15%;">
         </div>
         <span class="ps-num">02</span>
         <h3>Kostenlose Besichtigung</h3>
@@ -1338,24 +1338,6 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
         <p>Lokale Jungs, eigene Trucks, keine Subunternehmer.</p>
         <p>Wir sind ein lokales Team aus Kiel — wir kennen die Stadt, die Straßen und die Leute. Wir stehen persönlich für jeden Auftrag und arbeiten ohne Subunternehmer.</p>
         <p>Kein Call Center, kein Vermittler. Du rufst an und sprichst direkt mit dem Team, das auch kommt.</p>
-        <div class="about-stats">
-          <div class="about-stat">
-            <div class="as-num">200+</div>
-            <div class="as-label">Aufträge in Kiel</div>
-          </div>
-          <div class="about-stat">
-            <div class="as-num">10+</div>
-            <div class="as-label">Jahre Erfahrung</div>
-          </div>
-          <div class="about-stat">
-            <div class="as-num">4.9★</div>
-            <div class="as-label">Google-Bewertung</div>
-          </div>
-          <div class="about-stat">
-            <div class="as-num">0</div>
-            <div class="as-label">Subunternehmer</div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -1382,20 +1364,20 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
     </div>
     <div class="form-card">
       <h3>Kostenloses Angebot</h3>
-      <form onsubmit="return false;">
+      <form id="contact-form" onsubmit="submitContactForm(event)">
         <div class="form-row">
           <div class="form-group">
             <label>Name</label>
-            <input type="text" placeholder="Max Mustermann">
+            <input id="cf-name" type="text" placeholder="Max Mustermann" required>
           </div>
           <div class="form-group">
             <label>Telefon</label>
-            <input type="tel" placeholder="0160 …">
+            <input id="cf-phone" type="tel" placeholder="0160 …" required>
           </div>
         </div>
         <div class="form-group">
           <label>Leistung</label>
-          <select>
+          <select id="cf-service">
             <option value="">Bitte wählen</option>
             <option>Entrümpelung</option>
             <option>Umzug</option>
@@ -1405,7 +1387,7 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
         <div class="form-row">
           <div class="form-group">
             <label>Wohnungsgröße</label>
-            <select>
+            <select id="cf-size">
               <option value="">Zimmer / m²</option>
               <option>1 Zimmer / ~30m²</option>
               <option>2 Zimmer / ~60m²</option>
@@ -1415,7 +1397,7 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
           </div>
           <div class="form-group">
             <label>Wunschtermin</label>
-            <input type="date">
+            <input id="cf-date" type="date">
           </div>
         </div>
         <div class="form-group" style="margin-top:4px;">
@@ -1424,9 +1406,10 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
             Ich stimme der Verarbeitung meiner Daten zur Angebotserstellung zu. Mehr dazu in unserer <a href="/datenschutz.html" style="color:var(--orange);">Datenschutzerklärung</a>.
           </label>
         </div>
-        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">
+        <button id="cf-btn" type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">
           Kostenloses Angebot anfordern
         </button>
+        <p id="cf-msg" style="display:none;margin-top:12px;text-align:center;font-size:14px;"></p>
       </form>
     </div>
   </div>
@@ -2032,6 +2015,42 @@ navLinks.querySelectorAll('a').forEach(a => {
     navLinks.classList.remove('open');
   });
 });
+</script>
+<script>
+async function submitContactForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById('cf-btn');
+  const msg = document.getElementById('cf-msg');
+  btn.disabled = true;
+  btn.textContent = 'Wird gesendet…';
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name:    document.getElementById('cf-name').value,
+        phone:   document.getElementById('cf-phone').value,
+        service: document.getElementById('cf-service').value,
+        size:    document.getElementById('cf-size').value,
+        date:    document.getElementById('cf-date').value,
+      })
+    });
+    if (res.ok) {
+      msg.style.display = 'block';
+      msg.style.color = '#22c55e';
+      msg.textContent = '✓ Anfrage gesendet — wir melden uns innerhalb von 30 Minuten!';
+      document.getElementById('contact-form').reset();
+    } else {
+      throw new Error();
+    }
+  } catch {
+    msg.style.display = 'block';
+    msg.style.color = '#ef4444';
+    msg.textContent = 'Fehler beim Senden. Bitte ruf uns direkt an: 0160 94904681';
+  }
+  btn.disabled = false;
+  btn.textContent = 'Kostenloses Angebot anfordern';
+}
 </script>
 </body>
 </html>

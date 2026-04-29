@@ -34,11 +34,71 @@ def _save_quote(quote_id: str, data: dict):
 def index():
     return send_from_directory(str(BASE_DIR), 'index.html')
 
+@app.route('/entruempelung-kiel')
+def entruempelung():
+    return send_from_directory(str(BASE_DIR), 'entruempelung-kiel.html')
+
+@app.route('/umzug-kiel')
+def umzug():
+    return send_from_directory(str(BASE_DIR), 'umzug-kiel.html')
+
+@app.route('/kellerraeumung-kiel')
+def kellerraeumung():
+    return send_from_directory(str(BASE_DIR), 'kellerraeumung-kiel.html')
+
+@app.route('/firmenumzug-kiel')
+def firmenumzug():
+    return send_from_directory(str(BASE_DIR), 'firmenumzug-kiel.html')
+
+@app.route('/impressum')
+def impressum():
+    return send_from_directory(str(BASE_DIR), 'impressum.html')
+
+@app.route('/datenschutz')
+def datenschutz():
+    return send_from_directory(str(BASE_DIR), 'datenschutz.html')
+
 @app.route('/<path:filename>')
 def static_files(filename):
     return send_from_directory(str(BASE_DIR), filename)
 
 # ── API ───────────────────────────────────────────────────────────────────────
+
+@app.route('/api/contact', methods=['POST'])
+def api_contact():
+    import resend
+    data = request.get_json(silent=True) or {}
+    name    = data.get('name', '').strip()
+    phone   = data.get('phone', '').strip()
+    service = data.get('service', '').strip()
+    size    = data.get('size', '').strip()
+    date    = data.get('date', '').strip()
+
+    if not name or not phone:
+        return jsonify({'error': 'Name und Telefon sind erforderlich'}), 400
+
+    resend.api_key = os.getenv('RESEND_API_KEY')
+    if not resend.api_key:
+        return jsonify({'error': 'E-Mail-Versand nicht konfiguriert'}), 500
+
+    resend.Emails.send({
+        'from': 'Die Nordmänner Website <info@nordmaenner.com>',
+        'to': ['info@dienordmaenner.com'],
+        'subject': f'Neue Anfrage von {name}',
+        'html': f"""
+        <div style="font-family:sans-serif;max-width:500px">
+          <h2 style="color:#0d1b2a">Neue Kontaktanfrage</h2>
+          <table style="width:100%;border-collapse:collapse">
+            <tr><td style="padding:8px;font-weight:bold">Name</td><td style="padding:8px">{name}</td></tr>
+            <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Telefon</td><td style="padding:8px">{phone}</td></tr>
+            <tr><td style="padding:8px;font-weight:bold">Leistung</td><td style="padding:8px">{service}</td></tr>
+            <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Größe</td><td style="padding:8px">{size}</td></tr>
+            <tr><td style="padding:8px;font-weight:bold">Wunschtermin</td><td style="padding:8px">{date}</td></tr>
+          </table>
+        </div>
+        """
+    })
+    return jsonify({'success': True})
 
 @app.route('/api/autocomplete', methods=['GET'])
 def api_autocomplete():
