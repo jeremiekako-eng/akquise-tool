@@ -56,7 +56,8 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
 .nav-phone { font-size: 14px; font-weight: 600; color: var(--orange); text-decoration: none; }
 .has-drop { position: relative; }
 .has-drop > a::after { content: ' ▾'; font-size: 10px; opacity: 0.6; }
-.dropdown { display: none; position: absolute; top: calc(100% + 8px); left: 0; background: rgba(6,13,24,0.99); border: 1px solid var(--border); border-radius: 6px; min-width: 220px; padding: 6px 0; z-index: 300; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+.dropdown { display: none; position: absolute; top: 100%; left: 0; background: rgba(6,13,24,0.99); border: 1px solid var(--border); border-radius: 6px; min-width: 220px; padding: 6px 0; z-index: 300; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+.has-drop::before { content:''; position:absolute; top:100%; left:-10px; right:-10px; height:10px; }
 .has-drop:hover .dropdown { display: block; }
 .dropdown li { list-style: none; }
 .dropdown li a { display: block; padding: 10px 18px; font-size: 13px; color: rgba(255,255,255,0.8); text-decoration: none; border-bottom: 1px solid var(--border); }
@@ -133,6 +134,12 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
 .form-group input:focus, .form-group select:focus { border-color: var(--orange); }
 .form-group select option { background: var(--dark2); }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-overlay { display:none; position:fixed; inset:0; z-index:500; background:rgba(0,0,0,0.82); backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:20px; }
+.modal-overlay.open { display:flex; }
+.modal-box { background:var(--dark2); border:1px solid var(--border); border-radius:12px; width:100%; max-width:540px; max-height:90vh; overflow-y:auto; padding:40px; position:relative; }
+.modal-close { position:absolute; top:16px; right:16px; background:var(--dark3); border:none; color:var(--muted); width:36px; height:36px; border-radius:50%; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+.modal-close:hover { color:white; background:var(--orange); }
+@media(max-width:600px) { .modal-box { padding:24px 16px; } }
 footer { background: var(--dark2); padding: 40px 48px 24px; border-top: 1px solid var(--border); }
 .footer-inner { max-width: 1200px; margin: 0 auto; }
 .footer-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; margin-bottom: 32px; }
@@ -193,7 +200,7 @@ footer { background: var(--dark2); padding: 40px 48px 24px; border-top: 1px soli
   <div class="nav-cta">
     <a href="tel:+4916094904681" class="nav-phone">0160 94904681</a>
     <a href="tel:+4916094904681" class="btn btn-outline" style="padding:10px 18px;font-size:13px;">Anrufen</a>
-    <a href="#angebot" class="btn btn-primary" style="padding:10px 18px;font-size:13px;">Jetzt buchen</a>
+    <a href="#" onclick="openModal();return false;" class="btn btn-primary" style="padding:10px 18px;font-size:13px;">Jetzt buchen</a>
   </div>
   <button class="nav-hamburger" id="navHamburger"><span></span><span></span><span></span></button>
 </nav>
@@ -212,7 +219,7 @@ footer { background: var(--dark2); padding: 40px 48px 24px; border-top: 1px soli
     <h1>Privatumzug Kiel —<br><span>Festpreis</span> ab 350 €</h1>
     <p>Zuverlässige Umzugsfirma Kiel — Möbeltransport, Auf- und Abbau, Einpackservice. Kein Subunternehmer, verbindlicher Festpreis, kostenlose Besichtigung.</p>
     <div class="btn-group">
-      <a href="#angebot" class="btn btn-primary" style="font-size:15px;padding:15px 28px;">Jetzt kostenloses Angebot sichern</a>
+      <a href="#" onclick="openModal();return false;" class="btn btn-primary" style="font-size:15px;padding:15px 28px;">Jetzt kostenloses Angebot sichern</a>
       <a href="https://wa.me/4916094904681?text=Hallo%2C%20ich%20brauche%20ein%20Angebot%20f%C3%BCr%20einen%20Privatumzug%20in%20Kiel." target="_blank" class="btn btn-outline" style="font-size:15px;padding:15px 28px;">💬 WhatsApp</a>
     </div>
     <div style="margin-top:20px;">
@@ -290,7 +297,7 @@ footer { background: var(--dark2); padding: 40px 48px 24px; border-top: 1px soli
           <li>1 LKW + 2 Träger</li>
           <li>Bis 10 km Entfernung</li>
         </ul>
-        <a href="#angebot" class="btn btn-outline" style="width:100%;justify-content:center;">Angebot anfragen</a>
+        <a href="#" onclick="openModal();return false;" class="btn btn-outline" style="width:100%;justify-content:center;">Angebot anfragen</a>
       </div>
       <div class="price-block featured">
         <div class="pb-size">2–3 Zimmer / ~60–80 m²</div>
@@ -303,7 +310,7 @@ footer { background: var(--dark2); padding: 40px 48px 24px; border-top: 1px soli
           <li>Bis 20 km Entfernung</li>
           <li>Umzugsdecken inklusive</li>
         </ul>
-        <a href="#angebot" class="btn btn-primary" style="width:100%;justify-content:center;">Angebot anfragen</a>
+        <a href="#" onclick="openModal();return false;" class="btn btn-primary" style="width:100%;justify-content:center;">Angebot anfragen</a>
       </div>
       <div class="price-block">
         <div class="pb-size">4+ Zimmer / 100 m²+</div>
@@ -316,7 +323,7 @@ footer { background: var(--dark2); padding: 40px 48px 24px; border-top: 1px soli
           <li>Entfernung nach Absprache</li>
           <li>Einpackservice zubuchbar</li>
         </ul>
-        <a href="#angebot" class="btn btn-outline" style="width:100%;justify-content:center;">Angebot anfragen</a>
+        <a href="#" onclick="openModal();return false;" class="btn btn-outline" style="width:100%;justify-content:center;">Angebot anfragen</a>
       </div>
     </div>
     <p style="margin-top:16px;font-size:13px;color:var(--muted);">* Endpreis nach kostenloser Besichtigung. Preise bei mehr als 20 km Entfernung oder Einpackservice auf Anfrage.</p>
@@ -504,7 +511,62 @@ footer { background: var(--dark2); padding: 40px 48px 24px; border-top: 1px soli
   </div>
 </footer>
 
+<!-- MODAL ANGEBOT -->
+<div class="modal-overlay" id="angebotModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <span class="label orange">Kostenloses Angebot</span>
+    <h2 style="font-family:'Oswald',sans-serif;font-size:clamp(20px,3vw,26px);text-transform:uppercase;margin-bottom:8px;">Jetzt Angebot sichern</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:24px;">Rückmeldung innerhalb von <strong style="color:var(--orange);">30 Minuten</strong></p>
+    <form onsubmit="submitModal(event)">
+      <div class="form-row">
+        <div class="form-group"><label>Name</label><input type="text" placeholder="Max Mustermann" required></div>
+        <div class="form-group"><label>Telefon</label><input type="tel" placeholder="0160 …" required></div>
+      </div>
+      <div class="form-group">
+        <label>Was benötigst du?</label>
+        <select>
+          <option selected>Privatumzug</option>
+          <option>Umzug + Einpackservice</option>
+          <option>Umzug + Entrümpelung</option>
+          <option>Seniorenumzug</option>
+          <option>Möbeltransport</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Wohnungsgröße</label>
+        <select>
+          <option value="">Bitte wählen</option>
+          <option>1 Zimmer / ~30 m²</option>
+          <option>2 Zimmer / ~60 m²</option>
+          <option>3 Zimmer / ~80 m²</option>
+          <option>4+ Zimmer / 100 m²+</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-top:4px;">
+        <label style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:rgba(255,255,255,0.55);text-transform:none;letter-spacing:0;cursor:pointer;">
+          <input type="checkbox" required style="width:auto;margin-top:2px;flex-shrink:0;">
+          Ich stimme der Verarbeitung meiner Daten zu. (<a href="/datenschutz.html" style="color:var(--orange);">Datenschutz</a>)
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">Angebot anfordern</button>
+    </form>
+    <div style="margin-top:12px;">
+      <a href="https://wa.me/4916094904681?text=Hallo%2C%20ich%20brauche%20ein%20Angebot%20f%C3%BCr%20einen%20Privatumzug%20in%20Kiel." target="_blank" class="btn btn-outline" style="width:100%;justify-content:center;">💬 Direkt per WhatsApp</a>
+    </div>
+  </div>
+</div>
+
 <script>
+function openModal() { document.getElementById('angebotModal').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal() { document.getElementById('angebotModal').classList.remove('open'); document.body.style.overflow=''; }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+function submitModal(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type=submit]');
+  btn.textContent='Wird gesendet …'; btn.disabled=true;
+  setTimeout(()=>{ btn.textContent='✓ Gesendet — wir melden uns!'; btn.style.background='#22c55e'; },800);
+}
 function toggleFaq(el) {
   const item = el.parentElement;
   const isOpen = item.classList.contains('open');
