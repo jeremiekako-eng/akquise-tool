@@ -66,7 +66,8 @@ def static_files(filename):
 
 @app.route('/api/contact', methods=['POST'])
 def api_contact():
-    import resend
+    import smtplib
+    from email.mime.text import MIMEText
     data = request.get_json(silent=True) or {}
     name    = data.get('name', '').strip()
     phone   = data.get('phone', '').strip()
@@ -77,27 +78,28 @@ def api_contact():
     if not name or not phone:
         return jsonify({'error': 'Name und Telefon sind erforderlich'}), 400
 
-    resend.api_key = os.getenv('RESEND_API_KEY')
-    if not resend.api_key:
-        return jsonify({'error': 'E-Mail-Versand nicht konfiguriert'}), 500
+    gmail_user = os.getenv('GMAIL_USER')
+    gmail_pass = os.getenv('GMAIL_APP_PASSWORD')
+    if not gmail_user or not gmail_pass:
+        return jsonify({'error': 'E-Mail nicht konfiguriert'}), 500
 
-    resend.Emails.send({
-        'from': 'Die Nordmänner Website <info@nordmaenner.com>',
-        'to': ['info@dienordmaenner.com'],
-        'subject': f'Neue Anfrage von {name}',
-        'html': f"""
-        <div style="font-family:sans-serif;max-width:500px">
-          <h2 style="color:#0d1b2a">Neue Kontaktanfrage</h2>
-          <table style="width:100%;border-collapse:collapse">
-            <tr><td style="padding:8px;font-weight:bold">Name</td><td style="padding:8px">{name}</td></tr>
-            <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Telefon</td><td style="padding:8px">{phone}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold">Leistung</td><td style="padding:8px">{service}</td></tr>
-            <tr style="background:#f5f5f5"><td style="padding:8px;font-weight:bold">Größe</td><td style="padding:8px">{size}</td></tr>
-            <tr><td style="padding:8px;font-weight:bold">Wunschtermin</td><td style="padding:8px">{date}</td></tr>
-          </table>
-        </div>
-        """
-    })
+    body = f"""Neue Kontaktanfrage über die Website
+
+Name:        {name}
+Telefon:     {phone}
+Leistung:    {service}
+Größe:       {size}
+Wunschtermin: {date}
+"""
+    msg = MIMEText(body, 'plain', 'utf-8')
+    msg['Subject'] = f'Neue Anfrage: {name} – {service}'
+    msg['From']    = gmail_user
+    msg['To']      = 'info@dienordmaenner.com'
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(gmail_user, gmail_pass)
+        smtp.send_message(msg)
+
     return jsonify({'success': True})
 
 @app.route('/api/autocomplete', methods=['GET'])
