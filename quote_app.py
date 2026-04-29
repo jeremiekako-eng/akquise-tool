@@ -66,55 +66,34 @@ def static_files(filename):
 
 @app.route('/api/contact', methods=['POST'])
 def api_contact():
-    import smtplib
-    from email.mime.text import MIMEText
+    import resend
     try:
         data = request.get_json(silent=True) or {}
-        name    = data.get('name', '').strip()
-        phone   = data.get('phone', '').strip()
-        service = data.get('service', '').strip()
-        size    = data.get('size', '').strip()
-        date    = data.get('date', '').strip()
+        name  = data.get('name', '').strip()
+        phone = data.get('phone', '').strip()
 
         if not name or not phone:
             return jsonify({'error': 'Name und Telefon sind erforderlich'}), 400
 
-        gmail_user = os.getenv('GMAIL_USER')
-        gmail_pass = os.getenv('GMAIL_APP_PASSWORD')
-        print(f'[contact] GMAIL_USER gesetzt: {bool(gmail_user)}, GMAIL_APP_PASSWORD gesetzt: {bool(gmail_pass)}')
+        api_key = os.getenv('RESEND_API_KEY')
+        print(f'[contact] RESEND_API_KEY gesetzt: {bool(api_key)}')
+        if not api_key:
+            print('[contact] ERROR: RESEND_API_KEY fehlt in den Umgebungsvariablen')
+            return jsonify({'error': 'E-Mail nicht konfiguriert (RESEND_API_KEY fehlt)'}), 500
 
-        if not gmail_user or not gmail_pass:
-            print('[contact] ERROR: Gmail-Credentials fehlen in den Umgebungsvariablen')
-            return jsonify({'error': 'E-Mail nicht konfiguriert (fehlende Env-Variablen)'}), 500
-
-        body = f"""Neue Kontaktanfrage über die Website
-
-Name:         {name}
-Telefon:      {phone}
-Leistung:     {service}
-Größe:        {size}
-Wunschtermin: {date}
-"""
-        msg = MIMEText(body, 'plain', 'utf-8')
-        msg['Subject'] = f'Neue Anfrage: {name} – {service}'
-        msg['From']    = gmail_user
-        msg['To']      = 'info@dienordmaenner.com'
-
-        print(f'[contact] Sende E-Mail von {gmail_user} an info@dienordmaenner.com ...')
-        with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=10) as smtp:
-            smtp.login(gmail_user, gmail_pass)
-            smtp.send_message(msg)
+        resend.api_key = api_key
+        print(f'[contact] Sende E-Mail für {name} ({phone}) ...')
+        resend.Emails.send({
+            'from':    'Die Nordmänner <noreply@dienordmaenner.com>',
+            'to':      ['info@dienordmaenner.com'],
+            'subject': f'Neue Anfrage: {name}',
+            'html':    f'<p><b>Name:</b> {name}</p><p><b>Telefon:</b> {phone}</p>',
+        })
         print('[contact] E-Mail erfolgreich gesendet')
         return jsonify({'success': True})
 
-    except smtplib.SMTPAuthenticationError as e:
-        print(f'[contact] SMTP Auth-Fehler: {e}')
-        return jsonify({'error': f'Gmail-Login fehlgeschlagen: {e}'}), 500
-    except smtplib.SMTPException as e:
-        print(f'[contact] SMTP-Fehler: {e}')
-        return jsonify({'error': f'SMTP-Fehler: {e}'}), 500
     except Exception as e:
-        print(f'[contact] Unbekannter Fehler: {e}')
+        print(f'[contact] Fehler: {e}')
         return jsonify({'error': f'Serverfehler: {e}'}), 500
 
 @app.route('/api/autocomplete', methods=['GET'])
