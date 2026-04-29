@@ -1806,13 +1806,10 @@ function closeAngebotModal() {
 document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeAngebotModal(); closePriceModal(); } });
 async function submitAngebotModal(e) {
   e.preventDefault();
-  const btn  = e.target.querySelector('button[type=submit]');
-  const name  = document.getElementById('w-name').value.trim();
-  const phone = document.getElementById('w-phone').value.trim();
-  if (!name || !phone) {
-    alert('Bitte Name und Telefon ausfüllen.');
-    return;
-  }
+  const form  = e.target;
+  const btn   = form.querySelector('button[type=submit]');
+  const name  = form.querySelector('input[type=text]').value.trim();
+  const phone = form.querySelector('input[type=tel]').value.trim();
   btn.textContent = 'Wird gesendet …'; btn.disabled = true;
   try {
     const res = await fetch('/api/contact', {
