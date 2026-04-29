@@ -2041,13 +2041,12 @@ async function submitContactForm(e) {
       msg.textContent = '✓ Anfrage gesendet — wir melden uns innerhalb von 30 Minuten!';
       document.getElementById('contact-form').reset();
     } else {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || res.status);
+      throw new Error();
     }
-  } catch(err) {
+  } catch {
     msg.style.display = 'block';
     msg.style.color = '#ef4444';
-    msg.textContent = 'Fehler: ' + err.message + ' — ruf uns an: 0160 94904681';
+    msg.textContent = 'Fehler beim Senden. Bitte ruf uns direkt an: 0160 94904681';
   }
   btn.disabled = false;
   btn.textContent = 'Kostenloses Angebot anfordern';
