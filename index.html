@@ -1804,11 +1804,36 @@ function closeAngebotModal() {
   document.body.style.overflow = '';
 }
 document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeAngebotModal(); closePriceModal(); } });
-function submitAngebotModal(e) {
+async function submitAngebotModal(e) {
   e.preventDefault();
-  const btn = e.target.querySelector('button[type=submit]');
-  btn.textContent='Wird gesendet …'; btn.disabled=true;
-  setTimeout(()=>{ btn.textContent='✓ Gesendet — wir melden uns!'; btn.style.background='#22c55e'; },800);
+  const btn  = e.target.querySelector('button[type=submit]');
+  const name  = document.getElementById('w-name').value.trim();
+  const phone = document.getElementById('w-phone').value.trim();
+  if (!name || !phone) {
+    alert('Bitte Name und Telefon ausfüllen.');
+    return;
+  }
+  btn.textContent = 'Wird gesendet …'; btn.disabled = true;
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ name, phone })
+    });
+    if (res.ok) {
+      btn.textContent = '✓ Gesendet — wir melden uns!';
+      btn.style.background = '#22c55e';
+    } else {
+      const err = await res.json().catch(() => ({}));
+      btn.textContent = 'Fehler: ' + (err.error || res.status);
+      btn.style.background = '#ef4444';
+      btn.disabled = false;
+    }
+  } catch {
+    btn.textContent = 'Fehler — ruf uns an: 0160 94904681';
+    btn.style.background = '#ef4444';
+    btn.disabled = false;
+  }
 }
 function openPriceModal() {
   wizReset();
