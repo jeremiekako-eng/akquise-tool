@@ -143,7 +143,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 }
 </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Inter';font-weight:100 900;font-display:swap;src:url('/fonts/inter-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter';font-weight:100 900;font-display:swap;src:url('/fonts/inter-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Oswald';font-weight:200 700;font-display:swap;src:url('/fonts/oswald-latin.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Oswald';font-weight:200 700;font-display:swap;src:url('/fonts/oswald-latin-ext.woff2') format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+</style>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -849,8 +854,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- HERO -->
 <section class="hero">
-  <video class="hero-video" autoplay muted loop playsinline preload="auto" poster="images/before1.jpg">
-    <source src="hero.mp4" type="video/mp4">
+  <!-- Hero-Media: Mobile zeigt nur das Poster-Bild, Desktop lädt das Video -->
+  <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="/images/before1.jpg" width="1920" height="1080">
+    <source media="(min-width: 769px)" src="/hero.mp4" type="video/mp4">
   </video>
   <div class="hero-overlay"></div>
   <div class="hero-content">
@@ -915,7 +921,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div class="grid-3">
       <div class="photo-card">
-        <img src="/images/moebel-foto.jpg" alt="Wohnungsauflösung Kiel — Die Nordmänner">
+        <img src="/images/moebel-foto.jpg" alt="Wohnungsauflösung Kiel — Die Nordmänner" width="590" height="1280" loading="lazy" decoding="async">
         <div class="pc-overlay"></div>
         <div class="pc-content">
           <div class="pc-label">Entrümpelung</div>
@@ -925,7 +931,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
       <div class="photo-card">
-        <img src="/images/van-container.png" alt="Kellerräumung Kiel — Entrümpelung Festpreis">
+        <img src="/images/van-container.png" alt="Kellerräumung Kiel — Entrümpelung Festpreis" width="327" height="263" loading="lazy" decoding="async">
         <div class="pc-overlay"></div>
         <div class="pc-content">
           <div class="pc-label">Entrümpelung</div>
@@ -935,7 +941,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
       <div class="photo-card">
-        <img src="/images/entruempelung-keller.png" alt="Dachboden">
+        <img src="/images/entruempelung-keller.png" alt="Dachboden" width="704" height="1527" loading="lazy" decoding="async">
         <div class="pc-overlay"></div>
         <div class="pc-content">
           <div class="pc-label">Entrümpelung</div>
@@ -945,7 +951,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
       <div class="photo-card">
-        <img src="/images/umzug-treppe.png" alt="Privatumzug Kiel — Umzugsunternehmen Die Nordmänner">
+        <img src="/images/umzug-treppe.png" alt="Privatumzug Kiel — Umzugsunternehmen Die Nordmänner" width="704" height="1527" loading="lazy" decoding="async">
         <div class="pc-overlay"></div>
         <div class="pc-content">
           <div class="pc-label">Umzüge</div>
@@ -955,7 +961,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
       <div class="photo-card">
-        <img src="/images/moebel-foto.jpg" alt="Möbeltransport">
+        <img src="/images/moebel-foto.jpg" alt="Möbeltransport" width="590" height="1280" loading="lazy" decoding="async">
         <div class="pc-overlay"></div>
         <div class="pc-content">
           <div class="pc-label">Umzüge</div>
@@ -1078,7 +1084,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="process-grid">
       <div class="process-step">
         <div class="ps-img">
-          <img src="/images/anruf-kiel.png" alt="Kontakt">
+          <img src="/images/anruf-kiel.png" alt="Kontakt" width="704" height="1527" loading="lazy" decoding="async">
         </div>
         <span class="ps-num">01</span>
         <h3>Anruf oder WhatsApp</h3>
@@ -1086,7 +1092,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="process-step">
         <div class="ps-img">
-          <img src="/images/transporter-kiel.jpg" alt="Besichtigung vor Ort in Kiel — Die Nordmänner" style="object-position: center center;">
+          <img src="/images/transporter-kiel.jpg" alt="Besichtigung vor Ort in Kiel — Die Nordmänner" style="object-position: center center;" width="960" height="1280" loading="lazy" decoding="async">
         </div>
         <span class="ps-num">02</span>
         <h3>Kostenlose Besichtigung</h3>
@@ -1094,7 +1100,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="process-step">
         <div class="ps-img">
-          <img src="/images/fertig-besenrein.png" alt="Fertig">
+          <img src="/images/fertig-besenrein.png" alt="Fertig" width="1408" height="768" loading="lazy" decoding="async">
         </div>
         <span class="ps-num">03</span>
         <h3>Fertig — besenrein & pünktlich</h3>
@@ -1313,7 +1319,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="situation-grid">
       <div class="situation-card">
         <div class="sc-img">
-          <img src="/images/entruempelung-keller.png" alt="Todesfall">
+          <img src="/images/entruempelung-keller.png" alt="Todesfall" width="704" height="1527" loading="lazy" decoding="async">
         </div>
         <div class="sc-body">
           <span class="sc-tag">Todesfall</span>
@@ -1324,7 +1330,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="situation-card">
         <div class="sc-img">
-          <img src="/images/entruempelung-keller.png" alt="Pflegeheim">
+          <img src="/images/entruempelung-keller.png" alt="Pflegeheim" width="704" height="1527" loading="lazy" decoding="async">
         </div>
         <div class="sc-body">
           <span class="sc-tag">Pflegeheim</span>
@@ -1335,7 +1341,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="situation-card">
         <div class="sc-img">
-          <img src="/images/entruempelung-keller.png" alt="Messie">
+          <img src="/images/entruempelung-keller.png" alt="Messie" width="704" height="1527" loading="lazy" decoding="async">
         </div>
         <div class="sc-body">
           <span class="sc-tag">Messie-Wohnung</span>
@@ -1353,7 +1359,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="section inner">
     <div class="about-inner">
       <div class="about-img">
-        <img src="/images/team-handshake.png" alt="Die Nordmänner Team Kiel — persönlicher Kontakt">
+        <img src="/images/team-handshake.png" alt="Die Nordmänner Team Kiel — persönlicher Kontakt" width="896" height="1152" loading="lazy" decoding="async">
       </div>
       <div class="about-content">
         <span class="label orange">Team</span>
