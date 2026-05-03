@@ -39,11 +39,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="author" content="Die Nordmänner">
 <meta name="geo.region" content="DE-SH">
 <meta name="geo.placename" content="Kiel">
-<link rel="canonical" href="https://nordmaenner.com/">
+<link rel="canonical" href="https://dienordmaenner.com/">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://nordmaenner.com/">
+<meta property="og:url" content="https://dienordmaenner.com/">
 <meta property="og:title" content="Entrümpelung & Umzüge Kiel — Die Nordmänner">
 <meta property="og:description" content="Entrümpelung & Umzüge in Kiel mit Festpreis. Noch heute vor Ort, kostenlose Besichtigung. ☎ 0160 94904681">
 <meta property="og:locale" content="de_DE">
@@ -59,13 +59,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
+  "@id": "https://dienordmaenner.com/#business",
   "name": "Die Nordmänner",
   "description": "Entrümpelung, Wohnungsauflösung und Umzüge in Kiel mit Festpreis. Noch heute vor Ort.",
-  "url": "https://nordmaenner.com",
+  "url": "https://dienordmaenner.com",
   "telephone": "+4916094904681",
-  "email": "info@nordmaenner.com",
+  "email": "info@dienordmaenner.com",
+  "image": "https://dienordmaenner.com/images/transporter-kiel.jpg",
+  "priceRange": "€€",
   "address": {
     "@type": "PostalAddress",
+    "streetAddress": "Schaßstraße 8",
+    "postalCode": "24103",
     "addressLocality": "Kiel",
     "addressRegion": "Schleswig-Holstein",
     "addressCountry": "DE"
@@ -75,12 +80,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     "latitude": 54.3233,
     "longitude": 10.1228
   },
-  "areaServed": [
-    "Kiel", "Neumünster", "Rendsburg", "Eckernförde", "Plön"
-  ],
-  "serviceType": ["Entrümpelung", "Wohnungsauflösung", "Umzüge", "Transporte", "Kellerräumung"],
-  "priceRange": "€€",
-  "openingHours": "Mo-Sa 07:00-19:00",
+  "areaServed": ["Kiel", "Neumünster", "Rendsburg", "Eckernförde", "Plön", "Schleswig-Holstein"],
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    "opens": "07:00",
+    "closes": "19:00"
+  }],
   "sameAs": []
 }
 </script>

@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Nicht-Inhalt-Pfade ausschließen
+Disallow: /api/
+Disallow: /fonts/
+Disallow: /.vercel/
+Disallow: /*.json$
+
+Sitemap: https://dienordmaenner.com/sitemap.xml
