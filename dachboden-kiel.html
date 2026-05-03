@@ -1,7 +1,27 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<script>window.dataLayer = window.dataLayer || [];</script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'analytics_storage': 'denied',
+  'wait_for_update': 500
+});
+try {
+  if (localStorage.getItem('nm_consent') === 'granted') {
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted',
+      'ad_personalization': 'granted',
+      'analytics_storage': 'granted'
+    });
+  }
+} catch(e) {}
+</script>
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -494,8 +514,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
           <div class="form-group" style="margin-top:4px;">
             <label style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:rgba(255,255,255,0.55);text-transform:none;letter-spacing:0;cursor:pointer;">
-              <input type="checkbox" required style="width:auto;margin-top:2px;flex-shrink:0;">
-              Ich stimme der Verarbeitung meiner Daten zur Angebotserstellung zu. (<a href="/datenschutz.html" style="color:var(--orange);">Datenschutz</a>)
+              <input type="checkbox" class="nm-dsgvo" required style="width:auto;margin-top:2px;flex-shrink:0;">
+              <span>Ich habe die <a href="/datenschutz.html" target="_blank" style="color:var(--orange);">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zur Angebotserstellung zu.</span>
             </label>
           </div>
           <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">In 30 Sekunden Rückruf anfordern</button>
@@ -545,6 +565,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <ul>
           <li><a href="/impressum.html">Impressum</a></li>
           <li><a href="/datenschutz.html">Datenschutzerklärung</a></li>
+          <li><a href="#" onclick="return nmCookieReset(event)">Cookie-Einstellungen</a></li>
         </ul>
       </div>
     </div>
@@ -578,8 +599,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="form-group" style="margin-top:4px;">
         <label style="display:flex;align-items:flex-start;gap:10px;font-size:12px;color:rgba(255,255,255,0.55);text-transform:none;letter-spacing:0;cursor:pointer;">
-          <input type="checkbox" required style="width:auto;margin-top:2px;flex-shrink:0;">
-          Ich stimme der Verarbeitung meiner Daten zu. (<a href="/datenschutz.html" style="color:var(--orange);">Datenschutz</a>)
+          <input type="checkbox" class="nm-dsgvo" required style="width:auto;margin-top:2px;flex-shrink:0;">
+          <span>Ich habe die <a href="/datenschutz.html" target="_blank" style="color:var(--orange);">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zur Angebotserstellung zu.</span>
         </label>
       </div>
       <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">In 30 Sekunden Rückruf anfordern</button>
@@ -637,6 +658,84 @@ document.addEventListener('click', function(e) {
     window.dataLayer.push({event:'telefon_klick', event_value:25, currency:'EUR'});
   }
 });
+</script>
+
+<!-- Cookie Consent Banner -->
+<div id="nm-cookie-banner" class="nm-cookie-banner" role="dialog" aria-label="Cookie-Einstellungen" aria-hidden="true">
+  <div class="nm-cb-inner">
+    <div class="nm-cb-text">
+      <strong>Cookies &amp; Tracking</strong>
+      <p>Wir verwenden Cookies und ähnliche Technologien (Google Tag Manager, Google Ads) zur Reichweitenmessung und für personalisierte Werbung. Mit „Alle akzeptieren" stimmst du zu. „Nur notwendige" lehnt alles bis auf technisch erforderliche Cookies ab. Mehr in der <a href="/datenschutz.html">Datenschutzerklärung</a>.</p>
+    </div>
+    <div class="nm-cb-actions">
+      <button type="button" class="nm-cb-btn nm-cb-reject" onclick="nmCookieReject()">Nur notwendige</button>
+      <button type="button" class="nm-cb-btn nm-cb-accept" onclick="nmCookieAccept()">Alle akzeptieren</button>
+    </div>
+  </div>
+</div>
+<style>
+.nm-cookie-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 99999; background: #0A1628; border: 1px solid #1B3A5C; border-radius: 12px; padding: 20px 24px; max-width: 920px; margin: 0 auto; box-shadow: 0 8px 32px rgba(0,0,0,0.5); font-family: 'Inter', sans-serif; color: #fff; display: none; }
+.nm-cookie-banner.visible { display: block; }
+.nm-cb-inner { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+.nm-cb-text { flex: 1 1 320px; }
+.nm-cb-text strong { font-family: 'Oswald', sans-serif; text-transform: uppercase; font-size: 14px; letter-spacing: 0.08em; color: #5BA8E0; display: block; margin-bottom: 6px; }
+.nm-cb-text p { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.75); margin: 0; }
+.nm-cb-text a { color: #5BA8E0; }
+.nm-cb-actions { display: flex; gap: 10px; flex-shrink: 0; }
+.nm-cb-btn { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; padding: 11px 22px; border-radius: 8px; cursor: pointer; border: 1px solid; transition: all 0.15s; white-space: nowrap; }
+.nm-cb-reject { background: transparent; color: #fff; border-color: rgba(255,255,255,0.25); }
+.nm-cb-reject:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
+.nm-cb-accept { background: #5BA8E0; color: #060D18; border-color: #5BA8E0; }
+.nm-cb-accept:hover { background: #7DBFEC; border-color: #7DBFEC; }
+@media(max-width:600px) { .nm-cookie-banner { left: 8px; right: 8px; bottom: 8px; padding: 16px; } .nm-cb-inner { flex-direction: column; align-items: stretch; gap: 14px; } .nm-cb-actions { width: 100%; } .nm-cb-btn { flex: 1; padding: 13px 16px; } }
+</style>
+<script>
+(function() {
+  var KEY = 'nm_consent';
+  var banner = document.getElementById('nm-cookie-banner');
+  if (!banner) return;
+  function show() { banner.classList.add('visible'); banner.setAttribute('aria-hidden', 'false'); }
+  function hide() { banner.classList.remove('visible'); banner.setAttribute('aria-hidden', 'true'); }
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch(e) {}
+  if (!stored) show();
+  window.nmCookieAccept = function() {
+    try { localStorage.setItem(KEY, 'granted'); } catch(e) {}
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', { 'ad_storage':'granted', 'ad_user_data':'granted', 'ad_personalization':'granted', 'analytics_storage':'granted' });
+    }
+    window.dataLayer.push({event:'cookie_consent_granted'});
+    hide();
+  };
+  window.nmCookieReject = function() {
+    try { localStorage.setItem(KEY, 'denied'); } catch(e) {}
+    window.dataLayer.push({event:'cookie_consent_denied'});
+    hide();
+  };
+  window.nmCookieReset = function(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    try { localStorage.removeItem(KEY); } catch(e) {}
+    show();
+    return false;
+  };
+})();
+
+// DSGVO: Submit-Button deaktiviert bis Checkbox gesetzt
+(function() {
+  document.querySelectorAll('.nm-dsgvo').forEach(function(cb) {
+    var btn = null;
+    var form = cb.closest('form');
+    if (form) btn = form.querySelector('button[type=submit]');
+    if (!btn) return;
+    function update() {
+      btn.disabled = !cb.checked;
+      btn.style.opacity = cb.checked ? '' : '0.5';
+      btn.style.cursor = cb.checked ? '' : 'not-allowed';
+    }
+    update();
+    cb.addEventListener('change', update);
+  });
+})();
 </script>
 </body>
 </html>
