@@ -502,7 +502,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="cta-box">
         <h3 style="font-size:20px;margin-bottom:24px;">Kostenloses Angebot anfragen</h3>
-        <form onsubmit="submitForm(event)">
+        <form id="contact-form" onsubmit="submitForm(event)">
           <div class="form-row">
             <div class="form-group">
               <label>Name</label>
@@ -529,7 +529,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <span>Ich habe die <a href="/datenschutz.html" target="_blank" style="color:var(--orange);">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zur Angebotserstellung zu.</span>
             </label>
           </div>
-          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">In 30 Sekunden Rückruf anfordern</button>
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">Kostenloses Angebot anfordern</button>
           <p style="text-align:center;font-size:12px;color:rgba(255,255,255,0.45);margin-top:10px;">✓ Kostenlos &amp; unverbindlich &nbsp; ✓ Antwort innerhalb 30 Min &nbsp; ✓ Kein Spam</p>
         </form>
       </div>
@@ -546,7 +546,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <ul class="footer-contact-list">
           <li>📞 <a href="tel:+4916094904681">0160 94904681</a></li>
           <li>💬 <a href="https://wa.me/4916094904681?text=Hallo%20Nordm%C3%A4nner%2C%20ich%20habe%20eine%20Anfrage.">WhatsApp schreiben</a></li>
-          <li>🕐 Mo–Sa 7:00–20:00 Uhr</li>
+          <li>🕐 Mo–Sa 7–19 Uhr</li>
         </ul>
       </div>
       <div class="footer-col">
@@ -615,7 +615,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <span>Ich habe die <a href="/datenschutz.html" target="_blank" style="color:var(--orange);">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zur Angebotserstellung zu.</span>
         </label>
       </div>
-      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">In 30 Sekunden Rückruf anfordern</button>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">Kostenloses Angebot anfordern</button>
       <p style="text-align:center;font-size:12px;color:rgba(255,255,255,0.45);margin-top:10px;">✓ Kostenlos &amp; unverbindlich &nbsp; ✓ Antwort innerhalb 30 Min &nbsp; ✓ Kein Spam</p>
     </form>
     <div style="margin-top:12px;">
@@ -746,6 +746,40 @@ document.addEventListener('click', function(e) {
     }
     update();
     cb.addEventListener('change', update);
+  });
+})();
+
+// Sticky Mobile-Bar: Auto-Hide wenn Hauptformular sichtbar
+(function() {
+  var bar = document.querySelector('.mobile-bar');
+  var form = document.getElementById('contact-form');
+  if (!bar || !form || !('IntersectionObserver' in window)) return;
+  bar.style.transition = 'transform 0.25s ease';
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      bar.style.transform = (e.isIntersecting && e.intersectionRatio > 0.25) ? 'translateY(110%)' : '';
+    });
+  }, { threshold: [0, 0.25, 0.5] });
+  io.observe(form);
+})();
+
+// Telefon: Auf Desktop Click-to-Copy mit Toast-Feedback
+(function() {
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
+  var num = '0160 94904681';
+  document.querySelectorAll('a[href^="tel:"]').forEach(function(a) {
+    a.title = 'Klicken zum Kopieren';
+    a.addEventListener('click', function(e) {
+      if (!navigator.clipboard) return;
+      e.preventDefault();
+      navigator.clipboard.writeText(num).then(function() {
+        var t = document.createElement('div');
+        t.textContent = '📞 Nummer kopiert: ' + num;
+        t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#5BA8E0;color:#060D18;padding:12px 20px;border-radius:8px;font-weight:600;z-index:99998;box-shadow:0 4px 16px rgba(0,0,0,0.4);font-family:Inter,sans-serif;font-size:14px;';
+        document.body.appendChild(t);
+        setTimeout(function() { t.style.transition='opacity 0.3s'; t.style.opacity='0'; setTimeout(function() { t.remove(); }, 300); }, 1800);
+      });
+    });
   });
 })();
 </script>
