@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+<script>window.dataLayer = window.dataLayer || [];</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KRH7Q7PX');</script>
+<!-- End Google Tag Manager -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Entrümpelung & Umzüge Kiel — Die Nordmänner | Festpreis</title>
@@ -779,6 +787,10 @@ footer { background: var(--dark2); padding: 64px 48px 32px; border-top: 1px soli
 </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KRH7Q7PX"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <!-- NAV -->
 <nav>
@@ -1786,6 +1798,7 @@ async function submitAngebotModal(e) {
     if (res.ok) {
       btn.textContent = '✓ Gesendet — wir melden uns!';
       btn.style.background = '#22c55e';
+      window.dataLayer.push({event:'formular_gesendet', event_value:30, currency:'EUR', form_source:'modal'});
     } else {
       const err = await res.json().catch(() => ({}));
       btn.textContent = 'Fehler: ' + (err.error || res.status);
@@ -1921,6 +1934,13 @@ function wizCalc() {
 
   wizStep = 4;
   wizShowStep(4);
+  window.dataLayer.push({
+    event: 'preisrechner_abgeschlossen',
+    service_type: wizData.service_type,
+    distance_km: wizData.km,
+    weight_kg: wizData.kg,
+    estimated_price: gross
+  });
 }
 
 function wizSubmit() {
@@ -1958,6 +1978,13 @@ function wizSubmit() {
     if (data.success) {
       document.getElementById('wiz-wrapper').style.display = 'none';
       document.getElementById('wiz-success').classList.add('visible');
+      window.dataLayer.push({
+        event: 'preisrechner_lead',
+        event_value: 50,
+        currency: 'EUR',
+        service_type: wizData.service_type,
+        estimated_price: wizData.result ? wizData.result.gross : null
+      });
     } else {
       alert('Fehler: ' + (data.error || 'Unbekannter Fehler'));
       btn.disabled = false;
@@ -2026,6 +2053,7 @@ async function submitContactForm(e) {
       msg.style.color = '#22c55e';
       msg.textContent = '✓ Anfrage gesendet — wir melden uns innerhalb von 30 Minuten!';
       document.getElementById('contact-form').reset();
+      window.dataLayer.push({event:'formular_gesendet', event_value:30, currency:'EUR', form_source:'main'});
     } else {
       throw new Error();
     }
@@ -2038,5 +2066,49 @@ async function submitContactForm(e) {
   btn.textContent = 'In 30 Sekunden Rückruf anfordern';
 }
 </script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     CONVERSION-TRACKING — Click Delegation (WhatsApp & Telefon)
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+document.addEventListener('click', function(e) {
+  var a = e.target.closest('a[href]');
+  if (!a) return;
+  var href = a.getAttribute('href') || '';
+  if (href.indexOf('wa.me') > -1) {
+    window.dataLayer.push({event:'whatsapp_klick', event_value:15, currency:'EUR'});
+  } else if (href.indexOf('tel:') === 0) {
+    window.dataLayer.push({event:'telefon_klick', event_value:25, currency:'EUR'});
+  }
+});
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     GOOGLE ADS CONVERSION TAG (PLATZHALTER)
+     ───────────────────────────────────────────────────────────────
+     Aktivieren in 5 Schritten:
+     1. Google Ads öffnen → Tools & Einstellungen → "Conversions"
+     2. "+ Neue Conversion-Aktion" → Quelle "Website"
+     3. Pro Event eine Conversion anlegen (Empfehlung):
+        • formular_gesendet     → Wert 30 EUR  (einmalig)
+        • whatsapp_klick        → Wert 15 EUR  (jedes)
+        • telefon_klick         → Wert 25 EUR  (jedes)
+        • preisrechner_lead     → Wert 50 EUR  (einmalig)
+     4. Conversion-ID (AW-XXXXXXXXXX) und Label kopieren
+     5. Empfohlen: In GTM (KRH7Q7PX) ein "Google Ads Conversion Tracking"-
+        Tag erstellen, getriggert durch die dataLayer-Events oben.
+        Dann ist KEIN Code-Eintrag hier auf der Seite mehr nötig.
+     ───────────────────────────────────────────────────────────────
+     Falls du den globalen Site-Tag (gtag) statt GTM nutzen willst,
+     unten den Kommentar entfernen und CONVERSION_ID einsetzen:
+     ───────────────────────────────────────────────────────────────
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-CONVERSION_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-CONVERSION_ID');
+</script>
+     ═══════════════════════════════════════════════════════════════ -->
 </body>
 </html>
